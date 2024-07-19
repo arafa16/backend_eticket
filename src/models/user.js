@@ -11,10 +11,22 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      user.belongsTo(models.status_user,{
+        foreignKey:"status_user_id"
+      });
+      user.belongsTo(models.penempatan,{
+        foreignKey:"penempatan_id"
+      });
+      user.belongsTo(models.devisi,{
+        foreignKey:"devisi_id"
+      });
     }
   }
   user.init({
-    uuid: DataTypes.STRING,
+    uuid: {
+      type: DataTypes.STRING,
+      defaultValue: DataTypes.UUIDV4
+    },
     name: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
@@ -22,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     devisi_id: DataTypes.INTEGER,
     penempatan_id: DataTypes.INTEGER,
     status_user_id: DataTypes.INTEGER,
-    isDelete: DataTypes.BOOLEAN
+    is_delete: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'user',

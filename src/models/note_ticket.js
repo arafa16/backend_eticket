@@ -14,10 +14,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   note_ticket.init({
-    uuid: DataTypes.STRING,
+    uuid: {
+      type: DataTypes.STRING,
+      defaultValue: DataTypes.UUIDV4
+    },
     ticket_id: DataTypes.INTEGER,
     description: DataTypes.STRING,
-    isDelete: DataTypes.BOOLEAN
+    status_note_id: DataTypes.INTEGER,
+    is_delete: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'note_ticket',

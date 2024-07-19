@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('attachment_tickets', {
+    await queryInterface.createTable('status_notes', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -10,20 +10,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       uuid: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
-      ticket_id: {
+      name: {
+        type: Sequelize.STRING
+      },
+      sequence: {
         type: Sequelize.INTEGER
       },
-      file_name: {
-        type: Sequelize.STRING
-      },
-      file_link: {
-        type: Sequelize.STRING
-      },
       is_delete: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: 0
+        type: Sequelize.BOOLEAN
       },
       created_at: {
         allowNull: false,
@@ -36,6 +32,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('attachment_tickets');
+    await queryInterface.dropTable('status_notes');
   }
 };

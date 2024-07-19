@@ -18,7 +18,7 @@ module.exports = {
       description: {
         type: Sequelize.STRING
       },
-      isDelete: {
+      is_delete: {
         type: Sequelize.BOOLEAN,
         defaultValue: 0
       },

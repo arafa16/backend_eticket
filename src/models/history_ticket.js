@@ -14,10 +14,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   history_ticket.init({
-    uuid: DataTypes.STRING,
+    uuid: {
+      type: DataTypes.STRING,
+      defaultValue: DataTypes.UUIDV4
+    },
     ticket_id: DataTypes.INTEGER,
     description: DataTypes.STRING,
-    isDelete: DataTypes.BOOLEAN
+    is_delete: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'history_ticket',

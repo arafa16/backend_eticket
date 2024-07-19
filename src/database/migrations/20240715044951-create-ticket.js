@@ -12,6 +12,18 @@ module.exports = {
       uuid: {
         type: Sequelize.STRING,
       },
+      date: {
+        type: Sequelize.DATE
+      },
+      code:{
+        type: Sequelize.INTEGER,
+      },
+      year:{
+        type: Sequelize.STRING,
+      },
+      code_ticket:{
+        type: Sequelize.STRING,
+      },
       user_id: {
         type: Sequelize.INTEGER
       },
@@ -27,7 +39,7 @@ module.exports = {
       status_ticket_id: {
         type: Sequelize.INTEGER
       },
-      isDelete: {
+      is_delete: {
         type: Sequelize.BOOLEAN,
         defaultValue: 0
       },

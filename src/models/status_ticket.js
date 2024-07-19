@@ -14,10 +14,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   status_ticket.init({
-    uuid: DataTypes.STRING,
+    uuid: {
+      type: DataTypes.STRING,
+      defaultValue: DataTypes.UUIDV4
+    },
     name: DataTypes.STRING,
     sequence: DataTypes.INTEGER,
-    isDelete: DataTypes.BOOLEAN
+    is_delete: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'status_ticket',

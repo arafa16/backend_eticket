@@ -14,11 +14,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   attachment_ticket.init({
-    uuid: DataTypes.STRING,
+    uuid: {
+      type: DataTypes.STRING,
+      defaultValue: DataTypes.UUIDV4
+    },
     ticket_id: DataTypes.INTEGER,
     file_name: DataTypes.STRING,
     file_link: DataTypes.STRING,
-    isDelete: DataTypes.BOOLEAN
+    is_delete: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'attachment_ticket',

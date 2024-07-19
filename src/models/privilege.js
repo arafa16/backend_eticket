@@ -14,7 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   privilege.init({
-    uuid: DataTypes.STRING,
+    uuid: {
+      type: DataTypes.STRING,
+      defaultValue: DataTypes.UUIDV4
+    },
     dashboard: DataTypes.BOOLEAN,
     ticket_requestor: DataTypes.BOOLEAN,
     ticket_executor: DataTypes.BOOLEAN,

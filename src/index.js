@@ -1,0 +1,23 @@
+const express = require('express');
+require('express-async-errors');
+const dotenv = require('dotenv');
+const auth_router = require('./routes/auth.route.js');
+const ticket_router = require('./routes/ticket.route.js');
+const user_router = require('./routes/user.route.js');
+const errorHandlerMiddleware = require('./middleware/error-handler.js');
+const not_found = require('./middleware/not_found.js');
+
+const app = express();
+dotenv.config();
+
+app.use(express.json());
+//route
+app.use('/auth',auth_router);
+app.use('/user',user_router);
+app.use('/ticket',ticket_router);
+app.use(errorHandlerMiddleware);
+app.use(not_found);
+
+app.listen(process.env.BACKEND_PORT, ()=>{
+    console.log(`server running at port ${process.env.BACKEND_PORT}`);
+})

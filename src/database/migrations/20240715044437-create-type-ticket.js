@@ -19,7 +19,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         defaultValue:0
       },
-      isDelete: {
+      is_delete: {
         type: Sequelize.BOOLEAN,
         defaultValue: 0
       },

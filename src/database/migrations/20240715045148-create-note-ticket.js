@@ -22,7 +22,14 @@ module.exports = {
       description: {
         type: Sequelize.STRING
       },
-      isDelete: {
+      status_note_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "status_notes",
+          key: "id",
+        },
+      },
+      is_delete: {
         type: Sequelize.BOOLEAN,
         defaultValue: 0
       },

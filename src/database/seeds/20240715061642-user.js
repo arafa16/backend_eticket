@@ -11,9 +11,9 @@ module.exports = {
       email: 'admin@gmail.com',
       password: await argon.hash('admin'),
       nomor_hp: '+62',
-      devisi_id:6,
+      devisi_id:1,
       penempatan_id:1,
-      status_user_id:1,
+      status_user_id:2,
       created_at: new Date(),
       updated_at: new Date(),
     }])

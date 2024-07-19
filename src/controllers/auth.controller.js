@@ -1,7 +1,7 @@
-const {user : userModel} = require('../models');
+const {user : userModel, status_user:statusUserModel} = require('../models');
 const argon = require('argon2');
 const jwt = require('jsonwebtoken');
-const { where } = require('sequelize');
+const nodemailer = require('nodemailer');
 
 const register = async(req, res) => {
     const {name, email, password, nomor_hp, devisi_id, penempatan_id} = req.body;
@@ -61,12 +61,26 @@ const login = async(req, res) => {
     }
 
     const findUser = await userModel.findOne({
-        email
+        where:{
+            email
+        },
+        include:[
+            {
+                model:statusUserModel,
+                attributes:['name']
+            }
+        ]
     });
 
     if(!findUser){
         return res.status(404).json({
             message:"user not found"
+        })
+    }
+
+    if(findUser.status_user.name !== 'active' || findUser.is_delete){
+        return res.status(401).json({
+            message: `you don't have access, status account is ${findUser.status_user.name}`
         })
     }
 
@@ -116,8 +130,68 @@ const getMe = async(req, res) => {
     })
 }
 
+const sendEmailReset = async(req, res)=>{
+    const {email} = req.body;
+
+    const result = await userModel.findOne({
+        where:{
+            email
+        },
+        include:[
+            {
+                model:statusUserModel,
+                attributes:['name']
+            }
+        ]
+    })
+
+    if(!result){
+        return res.status(404).json({
+            message: "user not found"
+        })
+    }
+
+    if(result.status_user.name !== 'active' || result.is_delete){
+        return res.status(401).json({
+            message: `you don't have access, status account is ${result.status_user.name}`
+        })
+    }
+
+    const token = jwt.sign({uuid:result.uuid},process.env.JWT_SECRET,{
+        expiresIn: "5m"
+    });
+
+    const link = `${process.env.LINK_FRONTEND}/auth/reset/${token}`;
+
+     // create reusable transporter object using the default SMTP transport
+     const transporter = nodemailer.createTransport({
+        host: process.env.MAIL_HOST,
+        port: process.env.MAIL_PORT,
+        auth: {
+            user: process.env.MAIL_USER,
+            pass: process.env.MAIL_PASS
+        }
+    });
+
+    const emailMessage = {
+        from: '"E-ticket" <no-replay@kopkarla.co.id>',
+        to: email,
+        subject: "Reset Password",
+        text: 
+        `click this link for reset your password ${link}`
+    };
+
+    await transporter.sendMail(emailMessage);
+    
+    return res.status(200).json({
+        message: "success, check your email for reset password"
+    });
+        
+}
+
 module.exports = {
     register,
     login,
-    getMe
+    getMe,
+    sendEmailReset
 }

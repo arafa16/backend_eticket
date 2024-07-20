@@ -80,7 +80,7 @@ const login = async(req, res) => {
 
     if(findUser.status_user.name !== 'active' || findUser.is_delete){
         return res.status(401).json({
-            message: `you don't have access, status account is ${findUser.status_user.name}`
+            message: `you don't have access, status account is ${findUser.status_user.name}, not active`
         })
     }
 
@@ -189,9 +189,74 @@ const sendEmailReset = async(req, res)=>{
         
 }
 
+const getTokenReset = async(req, res) => {
+    const {token} = req.params;
+
+    if(!token){
+        return res.status(404).json({
+            message: "token not found"
+        })
+    }
+
+    //validation token
+    const verify = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await userModel.findOne({
+        where:{
+            uuid:verify.uuid
+        },
+        attributes:{
+            exclude:['id','password']
+        }
+    });
+
+    return res.status(200).json({
+        message:"success",
+        data:user
+    })
+}
+
+const resetPassword = async(req, res) => {
+    const {token} = req.params;
+    const {password, confPassword} = req.body;
+
+    if(!token){
+        return res.status(404).json({
+            message:"token not found"
+        });
+    }
+
+    if(password !== confPassword){
+        return res.status(401).json({
+            message:"password not match, please check again"
+        })
+    }
+
+    const verify = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await userModel.findOne({
+        where:{
+            uuid:verify.uuid
+        }
+    });
+
+    const hasPassword = await argon.hash(password);
+
+    await user.update({
+        password:hasPassword
+    })
+
+    return res.status(201).json({
+        message:"reset password successed"
+    })
+    
+}
+
 module.exports = {
     register,
     login,
     getMe,
-    sendEmailReset
+    sendEmailReset,
+    getTokenReset,
+    resetPassword
 }

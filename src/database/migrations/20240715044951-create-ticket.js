@@ -25,7 +25,11 @@ module.exports = {
         type: Sequelize.STRING,
       },
       user_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "users",
+          key: "id",
+        },
       },
       description: {
         type: Sequelize.STRING
@@ -33,11 +37,19 @@ module.exports = {
       executor_id: {
         type: Sequelize.INTEGER
       },
-      type_id: {
-        type: Sequelize.INTEGER
+      type_ticket_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "type_tickets",
+          key: "id",
+        },
       },
       status_ticket_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "status_tickets",
+          key: "id",
+        },
       },
       is_delete: {
         type: Sequelize.BOOLEAN,

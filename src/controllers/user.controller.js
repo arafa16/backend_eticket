@@ -1,4 +1,5 @@
-const { Op, where } = require('sequelize');
+const { Op } = require('sequelize');
+const argon = require('argon2')
 
 const {
     user : userModel, 
@@ -129,6 +130,113 @@ const createUser = async(req, res) => {
     });
 }
 
+const updateUser = async(req, res) => {
+    const {uuid} = req.params;
+    const {name, email, nomor_hp, devisi_uuid, penempatan_uuid, status_user_uuid} = req.body;
+
+    const user = await userModel.findOne({
+        where:{
+            uuid
+        }
+    })
+
+    if(!user){
+        return res.status(404).json({
+            message:"user not found"
+        })
+    }
+
+    if(!name || !email || !nomor_hp || !devisi_uuid || !penempatan_uuid || !status_user_uuid){
+        return res.status(401).json({
+            message:"field can't null"
+        })
+    }
+    
+    const devisi = await devisiModel.findOne({
+        where:{
+            uuid:devisi_uuid
+        }
+    });
+
+    if(!devisi){
+        return res.status(404).json({
+            message:"devisi not found"
+        })
+    }
+
+    const penempatan = await penempatanModel.findOne({
+        where:{
+            uuid:penempatan_uuid
+        }
+    });
+
+    if(!penempatan){
+        return res.status(404).json({
+            message:"penempatan not found"
+        })
+    }
+
+    const status_user = await statusUserModel.findOne({
+        where:{
+            uuid:status_user_uuid
+        }
+    });
+
+    if(!status_user){
+        return res.status(404).json({
+            message:"status user not found"
+        })
+    }
+
+    const result = await user.update({
+        name,
+        email,
+        nomor_hp,
+        devisi_id:devisi.id,
+        penempatan_id:penempatan.id,
+        status_user_id:status_user.id
+    });
+
+    res.status(201).json({
+        message: 'success',
+        data: result
+    });
+}
+
+const updatePassword = async(req, res) => {
+    const {uuid} = req.params;
+    const {password} = req.body;
+
+    const user = await userModel.findOne({
+        where:{
+            uuid
+        }
+    })
+
+    if(!user){
+        return res.status(404).json({
+            message:"user not found"
+        })
+    }
+
+    if(!password){
+        return res.status(401).json({
+            message:"field can't null"
+        })
+    }
+
+    const hasPassword = await argon.hash(password);
+
+    const result = await user.update({
+        password:hasPassword
+    });
+
+    res.status(201).json({
+        message: 'success',
+        data: result
+    });
+}
+
 const deleteUser = async(req, res) => {
     const {uuid} = req.params;
 
@@ -191,6 +299,8 @@ const hardDeleteUser = async(req, res) => {
 module.exports = {
     getUsers,
     createUser,
+    updateUser,
+    updatePassword,
     deleteUser,
     hardDeleteUser
 }

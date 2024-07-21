@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     code_ticket: DataTypes.STRING,
     description: DataTypes.STRING,
     executor_id: DataTypes.INTEGER,
-    type_id: DataTypes.INTEGER,
+    type_ticket_id: DataTypes.INTEGER,
     status_ticket_id: DataTypes.INTEGER,
     is_delete: DataTypes.BOOLEAN
   }, {

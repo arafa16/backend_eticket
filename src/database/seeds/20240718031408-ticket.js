@@ -14,7 +14,7 @@ module.exports = {
         code_ticket: 'T12024',
         description:'test',
         executor_id:1,
-        type_id:10,
+        type_ticket_id:10,
         status_ticket_id:1,
         is_delete:false,
         created_at: new Date(),

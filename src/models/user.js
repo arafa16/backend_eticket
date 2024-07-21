@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       user.belongsTo(models.devisi,{
         foreignKey:"devisi_id"
       });
+      user.hasMany(models.ticket);
     }
   }
   user.init({

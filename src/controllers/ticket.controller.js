@@ -7,7 +7,7 @@ const {
 } = require('../models');
 
 const getTickets = async(req, res) => {
-    const {uuid, code, year, name, code_ticket, sort} = req.query;
+    const {uuid, code, year, name, code_ticket, sort, is_delete} = req.query;
 
     const queryObject = {};
     let sortList = {};
@@ -30,6 +30,12 @@ const getTickets = async(req, res) => {
 
     if(year){
         queryObject.year = year
+    }
+
+    if(is_delete){
+        queryObject.is_delete = is_delete
+    }else{
+        queryObject.is_delete = 0
     }
 
     const page = Number(req.query.page) || 1;

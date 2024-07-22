@@ -18,6 +18,14 @@ module.exports = {
       sequence: {
         type: Sequelize.INTEGER
       },
+      is_select: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: 1
+      },
+      is_active: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: 1
+      },
       is_delete: {
         type: Sequelize.BOOLEAN
       },

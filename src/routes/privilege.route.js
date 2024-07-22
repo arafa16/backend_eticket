@@ -4,9 +4,9 @@ const { getByUser, createByUser, updateByUser, hardDeleteByUser } = require('../
 
 const router = express.Router();
 
-router.get('/:name', getByUser)
-router.post('/:name', createByUser)
-router.patch('/:name', updateByUser)
-router.delete('/:name', hardDeleteByUser)
+router.get('/:name', verifyToken, getByUser)
+router.post('/:name', verifyToken, createByUser)
+router.patch('/:name', verifyToken, updateByUser)
+router.delete('/:name', verifyToken, hardDeleteByUser)
 
 module.exports = router;

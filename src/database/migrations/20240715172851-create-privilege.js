@@ -28,7 +28,7 @@ module.exports = {
       },
       ticket_executor: {
         type: Sequelize.BOOLEAN
-      },
+      }, 
       entity: {
         type: Sequelize.BOOLEAN
       },

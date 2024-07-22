@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const auth_router = require('./routes/auth.route.js');
 const ticket_router = require('./routes/ticket.route.js');
 const user_router = require('./routes/user.route.js');
+const privilege_router = require('./routes/privilege.route.js');
 const errorHandlerMiddleware = require('./middleware/error-handler.js');
 const not_found = require('./middleware/not_found.js');
 
@@ -14,6 +15,7 @@ app.use(express.json());
 //route
 app.use('/auth',auth_router);
 app.use('/user',user_router);
+app.use('/privilege',privilege_router);
 app.use('/ticket',ticket_router);
 app.use(errorHandlerMiddleware);
 app.use(not_found);

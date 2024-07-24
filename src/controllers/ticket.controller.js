@@ -64,7 +64,6 @@ const getTickets = async(req, res) => {
 
 const createTicket = async(req, res) => {
     const {executor_uuid, description, status_ticket_uuid, type_ticket_uuid} = req.body;
-
     let executor_id = ''
 
     if(!description || !status_ticket_uuid || !type_ticket_uuid){
@@ -137,8 +136,6 @@ const createTicket = async(req, res) => {
             year
         }
     });
-
-    console.log(findTicket.count, 'findTicket');
 
 
     const code = Number(findTicket.count) + 1;

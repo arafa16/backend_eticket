@@ -22,7 +22,7 @@ const verifyToken = async(req, res, next) => {
             });
         }
 
-        const findUser = await userModel.findOne({
+        const user = await userModel.findOne({
             where:{
                 uuid:decoded.uuid
             },
@@ -34,21 +34,19 @@ const verifyToken = async(req, res, next) => {
             ]
         })
 
-        if(!findUser){
+        if(!user){
             return res.status(404).json({
                 message:"login failed, user not found or deleted"
             })
         }
     
-        if(findUser.status_user.name !== 'active' || findUser.is_delete){
+        if(user.status_user.name !== 'active' || user.is_delete){
             return res.status(401).json({
-                message: `you don't have access, status account is ${findUser.status_user.name}`
+                message: `you don't have access, status account is ${user.status_user.name}`
             })
         }
 
-        req.user = decoded;
-
-        console.log(req.user, 'req user')
+        req.user = user;
 
         next()
     });

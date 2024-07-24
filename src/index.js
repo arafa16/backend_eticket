@@ -1,4 +1,5 @@
 const express = require('express');
+const express_fileupload = require('express-fileupload');
 require('express-async-errors');
 const dotenv = require('dotenv');
 const auth_router = require('./routes/auth.route.js');
@@ -12,6 +13,7 @@ const status_ticket = require('./routes/status_ticket.route.js');
 const type_ticket = require('./routes/type_ticket.route.js');
 const note_ticket = require('./routes/note_ticket.route.js');
 const penempatan = require('./routes/penempatan.route.js');
+const attachment_ticket = require('./routes/attachment_ticket.route.js');
 const errorHandlerMiddleware = require('./middleware/error-handler.js');
 const not_found = require('./middleware/not_found.js');
 
@@ -19,6 +21,7 @@ const app = express();
 dotenv.config();
 
 app.use(express.json());
+app.use(express_fileupload());
 //route
 app.use('/auth',auth_router);
 app.use('/user',user_router);
@@ -31,6 +34,7 @@ app.use('/status_note',status_note);
 app.use('/type_ticket',type_ticket);
 app.use('/penempatan',penempatan);
 app.use('/note_ticket',note_ticket);
+app.use('/attachment_ticket',attachment_ticket);
 app.use(errorHandlerMiddleware);
 app.use(not_found);
 

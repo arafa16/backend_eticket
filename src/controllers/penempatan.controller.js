@@ -47,7 +47,8 @@ const getPenenpatanSelect = async(req, res) => {
     
     const result = await penempatanModel.findAll({
         where:{
-            is_select:true
+            is_select:true,
+            is_delete:false
         }
     });
 

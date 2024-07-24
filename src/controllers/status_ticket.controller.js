@@ -47,7 +47,8 @@ const getStatusTicketSelect = async(req, res) => {
     
     const result = await statusTicketModel.findAll({
         where:{
-            is_select:true
+            is_select:true,
+            is_delete:false
         }
     });
 

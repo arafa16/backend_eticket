@@ -1,6 +1,6 @@
-const {status_user: statusUserModel} = require('../models')
+const {status_note: statusNoteModel} = require('../models')
 
-const getStatusUsers = async(req, res) => {
+const getStatusNotes = async(req, res) => {
     const {uuid, name, sort, is_delete} = req.query;
 
     const queryObject = {};
@@ -30,7 +30,7 @@ const getStatusUsers = async(req, res) => {
     const limit = Number(req.query.limit) || 10;
     const offset = Number(page - 1) * limit;
 
-    const result = await statusUserModel.findAndCountAll({
+    const result = await statusNoteModel.findAndCountAll({
         where:queryObject,
         limit,
         offset,
@@ -43,9 +43,9 @@ const getStatusUsers = async(req, res) => {
     })
 }
 
-const getStatusUserSelect = async(req, res) => {
+const getStatusNoteSelect = async(req, res) => {
     
-    const result = await statusUserModel.findAll({
+    const result = await statusNoteModel.findAll({
         where:{
             is_select:true,
             is_delete:false
@@ -58,9 +58,9 @@ const getStatusUserSelect = async(req, res) => {
     })
 }
 
-const getStatusUserById = async(req, res) => {
+const getStatusNoteById = async(req, res) => {
     
-    const result = await statusUserModel.findAll({
+    const result = await statusNoteModel.findAll({
         where:{
             uuid:req.params.uuid
         }
@@ -72,7 +72,7 @@ const getStatusUserById = async(req, res) => {
     })
 }
 
-const createStatusUser = async(req, res) => {
+const createStatusNote = async(req, res) => {
     const {name, sequence, is_select, is_active} = req.body; 
 
     if(!name || !sequence){
@@ -81,7 +81,7 @@ const createStatusUser = async(req, res) => {
         })
     }
 
-    const result = await statusUserModel.create({
+    const result = await statusNoteModel.create({
        name,
        sequence,
        is_select,
@@ -94,7 +94,7 @@ const createStatusUser = async(req, res) => {
     })
 }
 
-const updateStatusUser = async(req, res) => {
+const updateStatusNote = async(req, res) => {
     const {uuid} = req.params;
     const {name, sequence, is_select, is_active} = req.body; 
 
@@ -104,19 +104,19 @@ const updateStatusUser = async(req, res) => {
         })
     }
 
-    const status_user = await statusUserModel.findOne({
+    const status_note = await statusNoteModel.findOne({
         where:{
             uuid
         }
     })
 
-    if(!status_user){
+    if(!status_note){
         return res.status(404).json({
             message:"not found"
         })
     }
 
-    const result = await status_user.update({
+    const result = await status_note.update({
        name,
        sequence,
        is_select,
@@ -129,22 +129,22 @@ const updateStatusUser = async(req, res) => {
     })
 }
 
-const deleteStatusUser = async(req, res) => {
+const deleteStatusNote = async(req, res) => {
     const {uuid} = req.params;
 
-    const statusUser = await statusUserModel.findOne({
+    const statusNote = await statusNoteModel.findOne({
         where:{
             uuid
         }
     });
 
-    if(!statusUser){
+    if(!statusNote){
         return res.status(404).json({
-            message:"status user not found"
+            message:"status note not found"
         })
     }
 
-    const result = await statusUser.update({
+    const result = await statusNote.update({
         is_delete:true
     });
 
@@ -154,22 +154,22 @@ const deleteStatusUser = async(req, res) => {
     })
 }
 
-const hardDeleteStatusUser = async(req, res) => {
+const hardDeleteStatusNote = async(req, res) => {
     const {uuid} = req.params;
 
-    const statusUser = await statusUserModel.findOne({
+    const statusNote = await statusNoteModel.findOne({
         where:{
             uuid
         }
     });
 
-    if(!statusUser){
+    if(!statusNote){
         return res.status(404).json({
-            message:"status user not found"
+            message:"status note not found"
         })
     }
 
-    const result = await statusUser.destroy();
+    const result = await statusNote.destroy();
 
     return res.status(200).json({
         message:'success',
@@ -178,11 +178,11 @@ const hardDeleteStatusUser = async(req, res) => {
 }
 
 module.exports = {
-    getStatusUsers,
-    getStatusUserSelect,
-    getStatusUserById,
-    createStatusUser,
-    updateStatusUser,
-    deleteStatusUser,
-    hardDeleteStatusUser
+    getStatusNotes,
+    getStatusNoteSelect,
+    getStatusNoteById,
+    createStatusNote,
+    updateStatusNote,
+    deleteStatusNote,
+    hardDeleteStatusNote
 }

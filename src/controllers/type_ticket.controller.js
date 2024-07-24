@@ -1,6 +1,6 @@
-const {status_user: statusUserModel} = require('../models')
+const {type_ticket:typeTicketModel} = require('../models');
 
-const getStatusUsers = async(req, res) => {
+const getTypeTickets = async(req, res) => {
     const {uuid, name, sort, is_delete} = req.query;
 
     const queryObject = {};
@@ -30,22 +30,22 @@ const getStatusUsers = async(req, res) => {
     const limit = Number(req.query.limit) || 10;
     const offset = Number(page - 1) * limit;
 
-    const result = await statusUserModel.findAndCountAll({
+    const type_ticket = await typeTicketModel.findAndCountAll({
         where:queryObject,
         limit,
         offset,
         order:[sortList]
     });
-    
+
     return res.status(200).json({
-        message:"success",
-        data:result
+        message:'success',
+        data:type_ticket
     })
 }
 
-const getStatusUserSelect = async(req, res) => {
+const getTypeTicketsSelect = async(req, res) => {
     
-    const result = await statusUserModel.findAll({
+    const type_ticket = await typeTicketModel.findAll({
         where:{
             is_select:true,
             is_delete:false
@@ -54,25 +54,32 @@ const getStatusUserSelect = async(req, res) => {
 
     return res.status(200).json({
         message:'success',
-        data:result
+        data:type_ticket
     })
 }
 
-const getStatusUserById = async(req, res) => {
-    
-    const result = await statusUserModel.findAll({
+const getTypeTicketByUuid = async(req, res) => {
+    const {uuid} = req.params;
+
+    const type_ticket = await typeTicketModel.findOne({
         where:{
-            uuid:req.params.uuid
+            uuid
         }
     });
 
+    if(!type_ticket){
+        return res.status(404).json({
+            message:"type ticket not found"
+        })
+    }
+
     return res.status(200).json({
         message:'success',
-        data:result
+        data:type_ticket
     })
 }
 
-const createStatusUser = async(req, res) => {
+const createTypeTicket = async(req, res) => {
     const {name, sequence, is_select, is_active} = req.body; 
 
     if(!name || !sequence){
@@ -81,12 +88,12 @@ const createStatusUser = async(req, res) => {
         })
     }
 
-    const result = await statusUserModel.create({
-       name,
-       sequence,
-       is_select,
-       is_active
-    });
+    const result = await typeTicketModel.create({
+        name,
+        sequence,
+        is_select,
+        is_active
+     });
 
     return res.status(200).json({
         message:'success',
@@ -94,9 +101,9 @@ const createStatusUser = async(req, res) => {
     })
 }
 
-const updateStatusUser = async(req, res) => {
+const updateTypeTicket = async(req, res) => {
     const {uuid} = req.params;
-    const {name, sequence, is_select, is_active} = req.body; 
+    const {name, sequence, is_select, is_active, is_delete} = req.body; 
 
     if(!name || !sequence){
         return res.status(401).json({
@@ -104,24 +111,25 @@ const updateStatusUser = async(req, res) => {
         })
     }
 
-    const status_user = await statusUserModel.findOne({
+    const type_ticket = await typeTicketModel.findOne({
         where:{
             uuid
         }
     })
 
-    if(!status_user){
+    if(!type_ticket){
         return res.status(404).json({
-            message:"not found"
+            message:"type ticket not found"
         })
     }
 
-    const result = await status_user.update({
-       name,
-       sequence,
-       is_select,
-       is_active
-    });
+    const result = await type_ticket.update({
+        name,
+        sequence,
+        is_select,
+        is_active,
+        is_delete
+     });
 
     return res.status(200).json({
         message:'success',
@@ -129,22 +137,22 @@ const updateStatusUser = async(req, res) => {
     })
 }
 
-const deleteStatusUser = async(req, res) => {
+const deleteTypeTicket = async(req, res) => {
     const {uuid} = req.params;
 
-    const statusUser = await statusUserModel.findOne({
+    const type_ticket = await typeTicketModel.findOne({
         where:{
             uuid
         }
     });
 
-    if(!statusUser){
+    if(!type_ticket){
         return res.status(404).json({
-            message:"status user not found"
+            message:"type ticket not found"
         })
     }
 
-    const result = await statusUser.update({
+    const result = await type_ticket.update({
         is_delete:true
     });
 
@@ -154,22 +162,22 @@ const deleteStatusUser = async(req, res) => {
     })
 }
 
-const hardDeleteStatusUser = async(req, res) => {
+const hardDeleteTypeTicket = async(req, res) => {
     const {uuid} = req.params;
 
-    const statusUser = await statusUserModel.findOne({
+    const type_ticket = await typeTicketModel.findOne({
         where:{
             uuid
         }
     });
 
-    if(!statusUser){
+    if(!type_ticket){
         return res.status(404).json({
-            message:"status user not found"
+            message:"type ticket not found"
         })
     }
 
-    const result = await statusUser.destroy();
+    const result = await type_ticket.destroy();
 
     return res.status(200).json({
         message:'success',
@@ -178,11 +186,11 @@ const hardDeleteStatusUser = async(req, res) => {
 }
 
 module.exports = {
-    getStatusUsers,
-    getStatusUserSelect,
-    getStatusUserById,
-    createStatusUser,
-    updateStatusUser,
-    deleteStatusUser,
-    hardDeleteStatusUser
+    getTypeTickets,
+    getTypeTicketsSelect,
+    getTypeTicketByUuid,
+    createTypeTicket,
+    updateTypeTicket,
+    deleteTypeTicket,
+    hardDeleteTypeTicket
 }

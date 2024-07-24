@@ -1,9 +1,41 @@
-const { where } = require('sequelize');
 const {devisi:devisiModel} = require('../models');
 
 const getDevisis = async(req, res) => {
+    const {uuid, name, sort, is_delete} = req.query;
 
-    const devisi = await devisiModel.findAll();
+    const queryObject = {};
+    let sortList = {};
+
+    if(uuid){
+        queryObject.uuid = uuid
+    }
+
+    if(name){
+        queryObject.name = name
+    }
+
+    if(sort){
+        sortList = sort;
+    }else{
+        sortList ='id';
+    }
+
+    if(is_delete){
+        queryObject.is_delete = is_delete
+    }else{
+        queryObject.is_delete = 0
+    }
+
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const offset = Number(page - 1) * limit;
+
+    const devisi = await devisiModel.findAndCountAll({
+        where:queryObject,
+        limit,
+        offset,
+        order:[sortList]
+    });
 
     return res.status(200).json({
         message:'success',

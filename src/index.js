@@ -22,6 +22,7 @@ dotenv.config();
 
 app.use(express.json());
 app.use(express_fileupload());
+app.use(express.static("src/public"));
 //route
 app.use('/auth',auth_router);
 app.use('/user',user_router);

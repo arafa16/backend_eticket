@@ -6,6 +6,7 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.bulkInsert('tickets',[
       {
+        id:1,
         uuid:uuid.v4(),
         user_id:1,
         date: new Date(),

@@ -6,6 +6,7 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     return queryInterface.bulkInsert('type_tickets',[
       {
+        id:1,
         uuid:uuid.v4(),
         name:'email',
         sequence:1,
@@ -13,6 +14,7 @@ module.exports = {
         updated_at: new Date(),
       },
       {
+        id:2,
         uuid:uuid.v4(),
         name:'jaringan',
         sequence:2,
@@ -20,6 +22,7 @@ module.exports = {
         updated_at: new Date(),
       },
       {
+        id:3,
         uuid:uuid.v4(),
         name:'laptop',
         sequence:3,
@@ -27,6 +30,7 @@ module.exports = {
         updated_at: new Date(),
       },
       {
+        id:4,
         uuid:uuid.v4(),
         name:'printer',
         sequence:4,
@@ -34,6 +38,7 @@ module.exports = {
         updated_at: new Date(),
       },
       {
+        id:5,
         uuid:uuid.v4(),
         name:'internet',
         sequence:5,
@@ -41,6 +46,7 @@ module.exports = {
         updated_at: new Date(),
       },
       {
+        id:6,
         uuid:uuid.v4(),
         name:'cctv',
         sequence:6,
@@ -48,6 +54,7 @@ module.exports = {
         updated_at: new Date(),
       },
       {
+        id:7,
         uuid:uuid.v4(),
         name:'teams',
         sequence:7,
@@ -55,6 +62,7 @@ module.exports = {
         updated_at: new Date(),
       },
       {
+        id:8,
         uuid:uuid.v4(),
         name:'request pengadaan',
         sequence:8,
@@ -62,6 +70,7 @@ module.exports = {
         updated_at: new Date(),
       },
       {
+        id:9,
         uuid:uuid.v4(),
         name:'erp',
         sequence:9,
@@ -69,6 +78,7 @@ module.exports = {
         updated_at: new Date(),
       },
       {
+        id:10,
         uuid:uuid.v4(),
         name:'lain-lain',
         sequence:10,

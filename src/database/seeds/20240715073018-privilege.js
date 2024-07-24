@@ -7,6 +7,7 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     return queryInterface.bulkInsert('privileges',[
       {
+        id:1,
         uuid:uuid.v4(),
         name:'admin',
         dashboard:1,

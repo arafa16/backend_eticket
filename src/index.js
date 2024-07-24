@@ -10,6 +10,7 @@ const status_user = require('./routes/status_user.route.js');
 const status_note = require('./routes/status_note.route.js');
 const status_ticket = require('./routes/status_ticket.route.js');
 const type_ticket = require('./routes/type_ticket.route.js');
+const note_ticket = require('./routes/note_ticket.route.js');
 const penempatan = require('./routes/penempatan.route.js');
 const errorHandlerMiddleware = require('./middleware/error-handler.js');
 const not_found = require('./middleware/not_found.js');
@@ -29,6 +30,7 @@ app.use('/status_ticket',status_ticket);
 app.use('/status_note',status_note);
 app.use('/type_ticket',type_ticket);
 app.use('/penempatan',penempatan);
+app.use('/note_ticket',note_ticket);
 app.use(errorHandlerMiddleware);
 app.use(not_found);
 

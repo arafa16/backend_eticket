@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4
     },
     ticket_id: DataTypes.INTEGER,
+    user_id: DataTypes.INTEGER,
     description: DataTypes.STRING,
     status_note_id: DataTypes.INTEGER,
     is_delete: DataTypes.BOOLEAN

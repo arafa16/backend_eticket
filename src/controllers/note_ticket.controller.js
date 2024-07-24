@@ -6,6 +6,33 @@ const {
     user:userModel
 } = require('../models');
 
+const getNoteTicketByTicket = async(req, res)=>{
+    const {uuid} = req.params;
+
+    const ticket = await ticketModel.findOne({
+        where:{
+            uuid
+        }
+    });
+
+    if(!ticket){
+        return res.status(404).json({
+            message:"ticket not found"
+        })
+    }
+
+    const result = await noteTicketModel.findAndCountAll({
+        where:{
+            ticket_id:ticket.id
+        }
+    })
+
+    return res.status(200).json({
+        message:"success",
+        data:result
+    })
+}
+
 const createNoteTicket = async(req, res)=>{
     const {ticket_uuid, user_uuid, description, status_note_uuid} = req.body;
 
@@ -175,6 +202,7 @@ const hardDeleteNoteTicket = async(req, res)=>{
 }
 
 module.exports = {
+    getNoteTicketByTicket,
     createNoteTicket,
     updateNoteTicket,
     deleteNoteTicket,

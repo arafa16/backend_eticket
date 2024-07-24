@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       defaultValue: DataTypes.UUIDV4
     },
+    user_id: DataTypes.INTEGER,
     ticket_id: DataTypes.INTEGER,
     description: DataTypes.STRING,
     is_delete: DataTypes.BOOLEAN

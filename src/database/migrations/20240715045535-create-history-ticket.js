@@ -22,6 +22,13 @@ module.exports = {
       description: {
         type: Sequelize.STRING
       },
+      user_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "users",
+          key: "id",
+        },
+      },
       is_delete: {
         type: Sequelize.BOOLEAN,
         defaultValue: 0

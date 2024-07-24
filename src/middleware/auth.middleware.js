@@ -48,6 +48,8 @@ const verifyToken = async(req, res, next) => {
 
         req.user = decoded;
 
+        console.log(req.user, 'req user')
+
         next()
     });
 }

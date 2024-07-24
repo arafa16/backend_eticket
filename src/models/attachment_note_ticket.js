@@ -14,7 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   attachment_note_ticket.init({
-    uuid: DataTypes.STRING,
+    uuid: {
+      type: DataTypes.STRING,
+      defaultValue: DataTypes.UUIDV4
+    },
     note_ticket_id: DataTypes.INTEGER,
     name: DataTypes.STRING,
     file_name: DataTypes.STRING,

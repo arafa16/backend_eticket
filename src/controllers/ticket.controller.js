@@ -5,6 +5,8 @@ const {
     type_ticket: typeTicketModel
 } = require('../models');
 
+const {createHistory} = require('./history_ticket.controller');
+
 const getTickets = async(req, res) => {
     const {uuid, code, year, name, code_ticket, sort, is_delete} = req.query;
 
@@ -61,9 +63,11 @@ const getTickets = async(req, res) => {
 }
 
 const createTicket = async(req, res) => {
-    const {user_uuid, executor_uuid, description, status_ticket_uuid, type_ticket_uuid} = req.body;
+    const {executor_uuid, description, status_ticket_uuid, type_ticket_uuid} = req.body;
 
-    if(!user_uuid || !description || !status_ticket_uuid || !type_ticket_uuid){
+    let executor_id = ''
+
+    if(!description || !status_ticket_uuid || !type_ticket_uuid){
         return res.status(401).jso({
             message: "field can't null"
         })
@@ -71,26 +75,33 @@ const createTicket = async(req, res) => {
 
     const user = await userModel.findOne({
         where:{
-            uuid:user_uuid
+            uuid:req.user.uuid
         }
     });
 
+
     if(!user){
-        return res.status(404).jso({
+        return res.status(404).json({
             message: "user not found"
         })
     }
 
-    const executor = await userModel.findOne({
-        where:{
-            uuid:executor_uuid
-        }
-    });
+    if(!executor_uuid){
+        executor_id=null;
+    }else{
+        const executor = await userModel.findOne({
+            where:{
+                uuid:executor_uuid
+            }
+        });
 
-    if(!executor){
-        return res.status(404).jso({
-            message: "executor not found"
-        })
+        if(!executor){
+            return res.status(404).json({
+                message: "executor not found"
+            })
+        }
+
+        executor_id=executor.id;
     }
 
     const status_ticket = await statusTicketModel.findOne({
@@ -100,7 +111,7 @@ const createTicket = async(req, res) => {
     })
 
     if(!status_ticket){
-        return res.status(404).jso({
+        return res.status(404).json({
             message: "status ticket not found"
         })
     }
@@ -112,7 +123,7 @@ const createTicket = async(req, res) => {
     })
 
     if(!type_ticket){
-        return res.status(404).jso({
+        return res.status(404).json({
             message: "type ticket not found"
         })
     }
@@ -130,7 +141,7 @@ const createTicket = async(req, res) => {
     console.log(findTicket.count, 'findTicket');
 
 
-    const code = Number(findTicket.count) + 1
+    const code = Number(findTicket.count) + 1;
 
     const code_ticket = `T${code}${year}`;
     
@@ -142,9 +153,15 @@ const createTicket = async(req, res) => {
         code_ticket,
         description:description,
         status_ticket_id:status_ticket.id,
-        type_id:type_ticket.id,
-        executor_id:executor.id
+        type_ticket_id:type_ticket.id,
+        executor_id
     })
+
+    createHistory({
+        ticket_id:result.id,
+        user_id:user.id,
+        description:'create ticket'
+    });
 
     return res.status(201).json({
         message: "success",
@@ -154,7 +171,9 @@ const createTicket = async(req, res) => {
 
 const updateTicket = async(req, res) => {
     const {uuid} = req.params;
-    const {user_uuid, executor_uuid, description, status_ticket_uuid, type_ticket_uuid, date, code, year, code_ticket} = req.body;
+    const {executor_uuid, description, status_ticket_uuid, type_ticket_uuid, date, code, year, code_ticket} = req.body;
+
+    let executor_id = ''
 
     const ticket = await ticketModel.findOne({
         where:{
@@ -170,26 +189,32 @@ const updateTicket = async(req, res) => {
 
     const user = await userModel.findOne({
         where:{
-            uuid:user_uuid
+            uuid:req.user.uuid
         }
     });
 
     if(!user){
-        return res.status(404).jso({
+        return res.status(404).json({
             message: "user not found"
         })
     }
 
-    const executor = await userModel.findOne({
-        where:{
-            uuid:executor_uuid
-        }
-    });
+    if(!executor_uuid){
+        executor_id=null;
+    }else{
+        const executor = await userModel.findOne({
+            where:{
+                uuid:executor_uuid
+            }
+        });
 
-    if(!executor){
-        return res.status(404).jso({
-            message: "executor not found"
-        })
+        if(!executor){
+            return res.status(404).json({
+                message: "executor not found"
+            })
+        }
+
+        executor_id=executor.id;
     }
 
     const status_ticket = await statusTicketModel.findOne({
@@ -199,7 +224,7 @@ const updateTicket = async(req, res) => {
     })
 
     if(!status_ticket){
-        return res.status(404).jso({
+        return res.status(404).json({
             message: "status ticket not found"
         })
     }
@@ -211,7 +236,7 @@ const updateTicket = async(req, res) => {
     })
 
     if(!type_ticket){
-        return res.status(404).jso({
+        return res.status(404).json({
             message: "type ticket not found"
         })
     }
@@ -225,8 +250,14 @@ const updateTicket = async(req, res) => {
         description:description,
         status_ticket_id:status_ticket.id,
         type_ticket_id:type_ticket.id,
-        executor_id:executor.id
+        executor_id
     })
+
+    createHistory({
+        ticket_id:result.id,
+        user_id:user.id,
+        description:'update ticket'
+    });
 
     return res.status(201).json({
         message: "success",
@@ -249,8 +280,26 @@ const deleteTicket = async(req, res) => {
         })
     }
 
+    const user = await userModel.findOne({
+        where:{
+            uuid:req.user.uuid
+        }
+    });
+
+    if(!user){
+        return res.status(404).json({
+            message: "user not found"
+        })
+    }
+
     await ticket.update({
         is_delete:true
+    });
+
+    createHistory({
+        ticket_id:ticket.id,
+        user_id:user.id,
+        description:'update ticket'
     });
 
     return res.status(201).json({

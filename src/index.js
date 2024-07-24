@@ -14,6 +14,7 @@ const type_ticket = require('./routes/type_ticket.route.js');
 const note_ticket = require('./routes/note_ticket.route.js');
 const penempatan = require('./routes/penempatan.route.js');
 const attachment_ticket = require('./routes/attachment_ticket.route.js');
+const attachment_note_ticket = require('./routes/attachment_note_ticket.route.js');
 const errorHandlerMiddleware = require('./middleware/error-handler.js');
 const not_found = require('./middleware/not_found.js');
 
@@ -36,6 +37,7 @@ app.use('/type_ticket',type_ticket);
 app.use('/penempatan',penempatan);
 app.use('/note_ticket',note_ticket);
 app.use('/attachment_ticket',attachment_ticket);
+app.use('/attachment_note_ticket',attachment_note_ticket);
 app.use(errorHandlerMiddleware);
 app.use(not_found);
 

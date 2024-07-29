@@ -2,17 +2,19 @@ const jwt = require('jsonwebtoken');
 const {user : userModel, status_user:statusUserModel} = require('../models');
 
 const verifyToken = async(req, res, next) => {
+
+    console.log(req.session.token, 'session verification');
     
-    const authHeader = req.headers["authorization"] || "";
+    // const authHeader = req.headers["authorization"] || "";
 
-    if(authHeader.split(" ").length !== 2){
-        return res.status(401).json({
-            message: "you don't have access",
-            data: null
-        });
-    }
+    // if(authHeader.split(" ").length !== 2){
+    //     return res.status(401).json({
+    //         message: "you don't have access",
+    //         data: null
+    //     });
+    // }
 
-    const token = authHeader.split(" ")[1];
+    const token = req.session.token;
 
     jwt.verify(token, process.env.JWT_SECRET, async(err, decoded)=>{
         if(err){

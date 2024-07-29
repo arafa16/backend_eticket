@@ -78,7 +78,6 @@ const createTicket = async(req, res) => {
         }
     });
 
-
     if(!user){
         return res.status(404).json({
             message: "user not found"

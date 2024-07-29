@@ -87,7 +87,7 @@ const login = async(req, res) => {
     const match = await argon.verify(findUser.password, password);
 
     if(!match){
-        return res.status(401).json({
+        return res.status(403).json({
             message:"wrong password"
         });
     }
@@ -102,6 +102,11 @@ const login = async(req, res) => {
             expiresIn: process.env.JWT_EXPIRES_IN,
         }
     );
+
+    req.session.token = token;
+    // req.headers.token = token;
+
+    console.log(req.headers, 'session');
 
     return res.status(200).json({
         success: true,
@@ -151,9 +156,9 @@ const sendEmailReset = async(req, res)=>{
         })
     }
 
-    if(result.status_user.name !== 'active' || result.is_delete){
+    if(result.is_delete){
         return res.status(401).json({
-            message: `you don't have access, status account is ${result.status_user.name}`
+            message: `you don't have access, account is deleted`
         })
     }
 
@@ -161,7 +166,7 @@ const sendEmailReset = async(req, res)=>{
         expiresIn: "5m"
     });
 
-    const link = `${process.env.LINK_FRONTEND}/auth/reset/${token}`;
+    const link = `${process.env.LINK_FRONTEND}/reset/${token}`;
 
      // create reusable transporter object using the default SMTP transport
      const transporter = nodemailer.createTransport({
@@ -220,7 +225,9 @@ const resetPassword = async(req, res) => {
     const {token} = req.params;
     const {password, confPassword} = req.body;
 
-    if(!token){
+    console.log(token, 'token')
+    
+    if(!token || token === null){
         return res.status(404).json({
             message:"token not found"
         });
@@ -252,11 +259,22 @@ const resetPassword = async(req, res) => {
     
 }
 
+const logout = async(req, res) => {
+    req.session.destroy((err)=>{
+        if(err) return res.status(400).json({msg: err.message});
+
+        return res.status(200).json({
+            message: "logout success"
+        });
+    })
+}
+
 module.exports = {
     register,
     login,
     getMe,
     sendEmailReset,
     getTokenReset,
-    resetPassword
+    resetPassword,
+    logout
 }

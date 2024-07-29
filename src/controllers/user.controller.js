@@ -205,12 +205,15 @@ const updateUser = async(req, res) => {
 const updatePassword = async(req, res) => {
     const {uuid} = req.params;
     const {password} = req.body;
+    const {confPassword} = req.body;
 
     const user = await userModel.findOne({
         where:{
             uuid
         }
     })
+
+    console.log(user, 'user');
 
     if(!user){
         return res.status(404).json({
@@ -220,7 +223,13 @@ const updatePassword = async(req, res) => {
 
     if(!password){
         return res.status(401).json({
-            message:"field can't null"
+            message:"password can't null"
+        })
+    }
+
+    if(password !== confPassword){
+        return res.status(401).json({
+            message:"password and confirmation password dosn't match"
         })
     }
 

@@ -17,13 +17,31 @@ const attachment_ticket = require('./routes/attachment_ticket.route.js');
 const attachment_note_ticket = require('./routes/attachment_note_ticket.route.js');
 const errorHandlerMiddleware = require('./middleware/error-handler.js');
 const not_found = require('./middleware/not_found.js');
+const cors = require('cors');
+const session = require('express-session');
 
 const app = express();
 dotenv.config();
 
+app.use(session({
+    secret: process.env.SESS_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    // store:store,
+    cookie: {
+        secure: 'auto',
+        expires: 1000 * 60 * 60
+    }
+}))
+
+app.use(cors({
+    credentials: true,
+    origin: [process.env.LINK_FRONTEND]
+}));
+
 app.use(express.json());
 app.use(express_fileupload());
-app.use(express.static("src/public"));
+app.use(express.static("public"));
 //route
 app.use('/auth',auth_router);
 app.use('/user',user_router);

@@ -32,13 +32,13 @@ const createAttachmentNoteTicket = async(req, res) => {
 
     const ext = path.extname(file.name);
     const file_name = crypto.randomUUID()+ext;
-    const file_link = `/attachment_note_ticket/${file_name}`;
+    const file_link = `/attachment/note_ticket/${file_name}`;
     const allowed_type = ['.png','.jpg','.jpeg','.xlsx','.doc'];
 
     //filter file type
     if(!allowed_type.includes(ext.toLowerCase())) return res.status(422).json({msg: "type file not allowed"});
 
-    file.mv(`./src/public/attachment_note_ticket/${file_name}`, async(err)=>{
+    file.mv(`./public/attachment/note_ticket/${file_name}`, async(err)=>{
         if(err) return res.status(500).json({message: err.message});
         try {
             await attachmentNoteTicketModel.create({

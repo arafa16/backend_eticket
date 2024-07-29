@@ -16,6 +16,15 @@ module.exports = {
         type: Sequelize.STRING,
         unique:true
       },
+      photo: {
+        type: Sequelize.STRING
+      },
+      photo_name: {
+        type: Sequelize.STRING
+      },
+      photo_link: {
+        type: Sequelize.STRING
+      },
       email: {
         type: Sequelize.STRING
       },

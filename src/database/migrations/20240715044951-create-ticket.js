@@ -35,7 +35,11 @@ module.exports = {
         type: Sequelize.STRING
       },
       executor_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: "users",
+          key: "id",
+        },
       },
       type_ticket_id: {
         type: Sequelize.INTEGER,

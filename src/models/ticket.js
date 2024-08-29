@@ -12,14 +12,20 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       ticket.belongsTo(models.user,{
-        foreignKey:"user_id"
+        foreignKey:"user_id",
+        as:'user'
       });
       ticket.belongsTo(models.user,{
-        foreignKey:"executor_id"
+        foreignKey:"executor_id",
+        as:'executor'
       });
       ticket.belongsTo(models.status_ticket,{
         foreignKey:"status_ticket_id"
       });
+      ticket.belongsTo(models.type_ticket,{
+        foreignKey:"type_ticket_id"
+      });
+      ticket.hasMany(models.history_ticket)
     }
   }
   ticket.init({

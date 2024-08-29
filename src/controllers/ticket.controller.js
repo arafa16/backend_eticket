@@ -1,8 +1,12 @@
+const { Op } = require('sequelize');
 const {
     ticket: ticketModel, 
     status_ticket: statusTicketModel, 
     user: userModel,
-    type_ticket: typeTicketModel
+    type_ticket: typeTicketModel,
+    devisi: devisiModel,
+    penempatan: penempatanModel,
+    history_ticket: historyTicketModel
 } = require('../models');
 
 const {createHistory} = require('./history_ticket.controller');
@@ -53,7 +57,34 @@ const getTickets = async(req, res) => {
         where:queryObject,
         limit,
         offset,
-        order:[sortList]
+        order:[sortList],
+        include:[
+            {
+                as:'user',
+                model:userModel,
+                include:[
+                    {
+                        model:devisiModel
+                    },
+                    {
+                        model:penempatanModel
+                    }
+                ]
+            },
+            {
+                as:'executor',
+                model:userModel,
+            },
+            {
+                model:typeTicketModel
+            },
+            {
+                model:statusTicketModel
+            },
+        ],
+        order:[
+            ['date','DESC']
+        ]
     });
 
     return res.status(200).json({
@@ -62,9 +93,170 @@ const getTickets = async(req, res) => {
     })
 }
 
+const getTicketById = async(req, res) => {
+
+    const {uuid} = req.query;
+
+    const queryObject = {};
+
+    if(uuid){
+        queryObject.uuid = uuid
+    }
+
+    const result = await ticketModel.findOne({
+        where:queryObject,
+        include:[
+            {
+                as:'user',
+                model:userModel,
+                include:[
+                    {
+                        model:devisiModel
+                    },
+                    {
+                        model:penempatanModel
+                    }
+                ]
+            },
+            {
+                as:'executor',
+                model:userModel,
+            },
+            {
+                model:typeTicketModel
+            },
+            {
+                model:statusTicketModel
+            },
+        ]
+    });
+
+    const history = await historyTicketModel.findAll({
+        where:{
+            ticket_id:result.id
+        },
+        order: [
+            ['created_at', 'DESC']
+        ],
+        include:[
+            {
+                model:userModel
+            }
+        ],
+    });
+
+    return res.status(200).json({
+        message: 'success',
+        data:result, 
+        history
+    });
+}
+
+const getTicketByUser = async(req, res) => {
+    const {uuid} = req.query;
+
+    const user = await userModel.findOne({
+        where:{
+            uuid
+        }
+    })
+
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const offset = Number(page - 1) * limit;
+    const notStatus = req.query.notStatus.split(',');
+
+    const result = await ticketModel.findAndCountAll({
+        where:{
+            user_id:user.id,
+            status_ticket_id:{
+                [Op.not]:notStatus
+            }
+        },
+        include:[
+            {
+                model:typeTicketModel
+            },
+            {
+                model:statusTicketModel
+            },
+            {
+                as:'executor',
+                model:userModel,
+            },
+            {
+                as:'user',
+                model:userModel,
+            }
+        ],
+        limit,
+        offset,
+        order:[
+            ['date','DESC']
+        ]
+    });
+
+    return res.status(200).json({
+        message: 'success bro',
+        data: result
+    })
+}
+
+const getTicketByPic = async(req, res) => {
+    const {uuid} = req.query;
+
+    const user = await userModel.findOne({
+        where:{
+            uuid
+        }
+    })
+
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const offset = Number(page - 1) * limit;
+    const notStatus = req.query.notStatus.split(',');
+
+    const result = await ticketModel.findAndCountAll({
+        where:{
+            executor_id:user.id,
+            status_ticket_id:{
+                [Op.not]:notStatus
+            }
+        },
+        include:[
+            {
+                model:typeTicketModel
+            },
+            {
+                model:statusTicketModel
+            },
+            {
+                as:'executor',
+                model:userModel,
+            },
+            {
+                as:'user',
+                model:userModel,
+            }
+        ],
+        limit,
+        offset,
+        order:[
+            ['date','DESC']
+        ]
+    });
+
+    return res.status(200).json({
+        message: 'success bro',
+        data: result
+    })
+}
+
 const createTicket = async(req, res) => {
-    const {executor_uuid, description, status_ticket_uuid, type_ticket_uuid} = req.body;
+    const {user_uuid, executor_uuid, description, status_ticket_uuid, type_ticket_uuid} = req.body;
+    
     let executor_id = ''
+    let user_id = ''
 
     if(!description || !status_ticket_uuid || !type_ticket_uuid){
         return res.status(401).jso({
@@ -72,17 +264,25 @@ const createTicket = async(req, res) => {
         })
     }
 
-    const user = await userModel.findOne({
-        where:{
-            uuid:req.user.uuid
-        }
-    });
+    if(!user_uuid){
+        const user = await userModel.findOne({
+            where:{
+                uuid:req.user.uuid
+            }
+        });
 
-    if(!user){
-        return res.status(404).json({
-            message: "user not found"
-        })
+        user_id = user.id
+    }else{
+        const user = await userModel.findOne({
+            where:{
+                uuid:user_uuid
+            }
+        });
+
+        user_id = user.id
     }
+
+    console.log(user_id, 'user_id')
 
     if(!executor_uuid){
         executor_id=null;
@@ -142,7 +342,7 @@ const createTicket = async(req, res) => {
     const code_ticket = `T${code}${year}`;
     
     const result = await ticketModel.create({
-        user_id:user.id,
+        user_id:user_id,
         date,
         code,
         year,
@@ -155,7 +355,7 @@ const createTicket = async(req, res) => {
 
     createHistory({
         ticket_id:result.id,
-        user_id:user.id,
+        user_id:user_id,
         description:'create ticket'
     });
 
@@ -167,9 +367,15 @@ const createTicket = async(req, res) => {
 
 const updateTicket = async(req, res) => {
     const {uuid} = req.params;
-    const {executor_uuid, description, status_ticket_uuid, type_ticket_uuid, date, code, year, code_ticket} = req.body;
+    const {user_uuid, executor_uuid, description, type_ticket_uuid} = req.body;
 
     let executor_id = ''
+
+    const userLogin = await userModel.findOne({
+        where:{
+            uuid:req.user.uuid
+        }
+    });
 
     const ticket = await ticketModel.findOne({
         where:{
@@ -185,7 +391,7 @@ const updateTicket = async(req, res) => {
 
     const user = await userModel.findOne({
         where:{
-            uuid:req.user.uuid
+            uuid:user_uuid
         }
     });
 
@@ -213,18 +419,6 @@ const updateTicket = async(req, res) => {
         executor_id=executor.id;
     }
 
-    const status_ticket = await statusTicketModel.findOne({
-        where:{
-            uuid:status_ticket_uuid
-        }
-    })
-
-    if(!status_ticket){
-        return res.status(404).json({
-            message: "status ticket not found"
-        })
-    }
-
     const type_ticket = await typeTicketModel.findOne({
         where:{
             uuid:type_ticket_uuid
@@ -239,20 +433,71 @@ const updateTicket = async(req, res) => {
     
     const result = await ticket.update({
         user_id:user.id,
-        date,
-        code,
-        year,
-        code_ticket,
         description:description,
-        status_ticket_id:status_ticket.id,
         type_ticket_id:type_ticket.id,
         executor_id
     })
 
     createHistory({
         ticket_id:result.id,
+        user_id:userLogin.id,
+        description:'edit ticket'
+    });
+
+    return res.status(201).json({
+        message: "success",
+        data:result
+    });
+}
+
+const updateStatusTicket = async(req, res) => {
+    const {uuid} = req.params;
+    const {status_ticket_uuid} = req.body;
+
+    const user = await userModel.findOne({
+        where:{
+            uuid:req.user.uuid
+        }
+    });
+
+    if(!user){
+        return res.status(404).json({
+            message: "please login again"
+        })
+    }
+
+    const ticket = await ticketModel.findOne({
+        where:{
+            uuid
+        }
+    });
+
+    if(!ticket){
+        return res.status(404).json({
+            message:"ticket not found"
+        })
+    }
+
+    const status_ticket = await statusTicketModel.findOne({
+        where:{
+            uuid:status_ticket_uuid
+        }
+    })
+
+    if(!status_ticket){
+        return res.status(404).json({
+            message: "status ticket not found"
+        })
+    }
+
+    const result = await ticket.update({
+        status_ticket_id:status_ticket.id,
+    })
+
+    createHistory({
+        ticket_id:result.id,
         user_id:user.id,
-        description:'update ticket'
+        description:`update status to ${status_ticket.name}`
     });
 
     return res.status(201).json({
@@ -328,8 +573,12 @@ const hardDeleteTicket = async(req, res) => {
 
 module.exports = {
     getTickets,
+    getTicketById,
     createTicket,
     updateTicket,
     deleteTicket,
-    hardDeleteTicket
+    hardDeleteTicket,
+    getTicketByUser,
+    getTicketByPic,
+    updateStatusTicket
 }

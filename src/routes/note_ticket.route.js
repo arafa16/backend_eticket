@@ -4,7 +4,7 @@ const {verifyToken} = require('../middleware/auth.middleware.js');
 
 const router = express.Router();
 
-router.get('/ticket/:uuid', verifyToken, getNoteTicketByTicket);
+router.get('/data', verifyToken, getNoteTicketByTicket);
 router.post('/data', verifyToken, createNoteTicket);
 router.patch('/data/:uuid', verifyToken, updateNoteTicket);
 router.delete('/data/:uuid', verifyToken, deleteNoteTicket);

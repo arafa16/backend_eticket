@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       user.belongsTo(models.devisi,{
         foreignKey:"devisi_id"
       });
-      user.hasMany(models.ticket);
+      user.hasMany(models.history_ticket);
     }
   }
   user.init({
@@ -38,6 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     devisi_id: DataTypes.INTEGER,
     penempatan_id: DataTypes.INTEGER,
     status_user_id: DataTypes.INTEGER,
+    is_executor: DataTypes.BOOLEAN,
     is_delete: DataTypes.BOOLEAN
   }, {
     sequelize,

@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      note_ticket.belongsTo(models.status_note,{
+        foreignKey:"status_note_id"
+      })
     }
   }
   note_ticket.init({
@@ -22,7 +25,8 @@ module.exports = (sequelize, DataTypes) => {
     user_id: DataTypes.INTEGER,
     description: DataTypes.STRING,
     status_note_id: DataTypes.INTEGER,
-    is_delete: DataTypes.BOOLEAN
+    is_delete: DataTypes.BOOLEAN,
+    created_at:DataTypes.DATE
   }, {
     sequelize,
     modelName: 'note_ticket',

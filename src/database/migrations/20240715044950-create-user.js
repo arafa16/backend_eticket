@@ -55,6 +55,10 @@ module.exports = {
           key: "id",
         },
       },
+      is_executor: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: 0
+      },
       is_delete: {
         type: Sequelize.BOOLEAN,
         defaultValue: 0

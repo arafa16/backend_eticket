@@ -1,4 +1,6 @@
-const argon = require('argon2')
+const argon = require('argon2');
+const path = require('path');
+const crypto = require('crypto');
 
 const {
     user : userModel, 
@@ -48,6 +50,32 @@ const getUsers = async(req, res) => {
         offset,
         order:[sortList]
     });
+
+    return res.status(200).json({
+        message:"success",
+        data:result
+    })
+
+}
+
+const getExecutorSelect = async(req, res) => {
+    
+    const result = await userModel.findAll({
+        where:{
+            is_executor:true
+        }
+    });
+
+    return res.status(200).json({
+        message:"success",
+        data:result
+    })
+
+}
+
+const getUserSelect = async(req, res) => {
+    
+    const result = await userModel.findAll();
 
     return res.status(200).json({
         message:"success",
@@ -304,11 +332,54 @@ const hardDeleteUser = async(req, res) => {
     })
 }
 
+const setPhotoProfile = async(req, res) => {
+    const {uuid} = req.params;
+
+    const user = await userModel.findOne({
+        where:{
+            uuid
+        }
+    });
+
+    if(!user){
+        return res.status(200).json({
+            message:"user not found"
+        })
+    }
+
+    const photo = req.files.photo;
+    const ext = path.extname(photo.name);
+    const photo_name = crypto.randomUUID()+ext;
+    const photo_link = `/photo/${photo_name}`;
+    const allowed_type = ['.png','.jpg','.jpeg'];
+
+    //filter file type
+    if(!allowed_type.includes(ext.toLowerCase())) return res.status(422).json({msg: "type file not allowed"});
+    
+    photo.mv(`./public/photo/${photo_name}`, async(err)=>{
+        if(err) return res.status(500).json({message: err.message});
+        try {
+            await user.update({
+                photo:photo.name,
+                photo_name,
+                photo_link
+            });
+
+            return res.status(201).json({message: "photo uploaded"});
+        } catch (error) {
+            return res.status(500).json({message: error.message});
+        }
+    });
+}
+
 module.exports = {
     getUsers,
+    getExecutorSelect,
+    getUserSelect,
     createUser,
     updateUser,
     updatePassword,
     deleteUser,
-    hardDeleteUser
+    hardDeleteUser,
+    setPhotoProfile
 }

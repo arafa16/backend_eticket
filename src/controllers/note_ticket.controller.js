@@ -3,15 +3,26 @@ const {
     note_ticket:noteTicketModel, 
     ticket:ticketModel,
     status_note:statusNoteModel,
-    user:userModel
+    user:userModel,
 } = require('../models');
 
+const {createHistory} = require('./history_ticket.controller');
+
 const getNoteTicketByTicket = async(req, res)=>{
-    const {uuid} = req.params;
+
+    const {ticket_uuid, sort, is_delete} = req.query;
+    
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const offset = Number(page - 1) * limit;
+
+    const queryObject = {};
+    let sortList = {};
+    
 
     const ticket = await ticketModel.findOne({
         where:{
-            uuid
+            uuid:ticket_uuid
         }
     });
 
@@ -21,10 +32,32 @@ const getNoteTicketByTicket = async(req, res)=>{
         })
     }
 
+    if(is_delete){
+        queryObject.is_delete = is_delete
+    }else{
+        queryObject.is_delete = false;
+    }
+
+    if(ticket){
+        queryObject.ticket_id = ticket.id
+    }
+
+    if(sort){
+        sortList = sort;
+    }else{
+        sortList ='created_at';
+    }
+
     const result = await noteTicketModel.findAndCountAll({
-        where:{
-            ticket_id:ticket.id
-        }
+        where:queryObject,
+        limit,
+        offset,
+        order:[[sortList, 'DESC']],
+        include:[
+            {
+                model:statusNoteModel
+            }
+        ]
     })
 
     return res.status(200).json({
@@ -37,6 +70,7 @@ const createNoteTicket = async(req, res)=>{
     const {ticket_uuid, user_uuid, description, status_note_uuid} = req.body;
 
     let status_note_id = '';
+    let status_note_name = null;
 
     const user = await userModel.findOne({
         where:{
@@ -64,6 +98,7 @@ const createNoteTicket = async(req, res)=>{
 
     if(!status_note_uuid){
         status_note_id = 1;
+        status_note_name = 'draft';
     }else{
         const status_note = await statusNoteModel.findOne({
             where:{
@@ -72,6 +107,7 @@ const createNoteTicket = async(req, res)=>{
         });
 
         status_note_id = status_note.id
+        status_note_name = status_note.name
     }
 
     const result = await noteTicketModel.create({
@@ -80,6 +116,12 @@ const createNoteTicket = async(req, res)=>{
         description,
         status_note_id
     })
+
+    createHistory({
+        ticket_id:ticket.id,
+        user_id:user.id,
+        description: 'create note (' + description + `) : set status to ${status_note_name}`
+    });
 
     return res.status(201).json({
         message:"success",
@@ -91,8 +133,6 @@ const updateNoteTicket = async(req, res)=>{
     const {uuid} = req.params;
 
     const {ticket_uuid, user_uuid, description, status_note_uuid} = req.body;
-
-    let status_note_id = '';
 
     const note_ticket = await noteTicketModel.findOne({
         where:{
@@ -130,24 +170,30 @@ const updateNoteTicket = async(req, res)=>{
         })
     }
 
-    if(!status_note_uuid){
-        status_note_id = 1;
-    }else{
-        const status_note = await statusNoteModel.findOne({
-            where:{
-                uuid:status_note_uuid
-            }
-        });
+    const status_note = await statusNoteModel.findOne({
+        where:{
+            uuid:status_note_uuid
+        }
+    });
 
-        status_note_id = status_note.id
+    if(!status_note){
+        return res.status(404).json({
+            message:"note ticket not found"
+        })
     }
 
     const result = await note_ticket.update({
         ticket_id:ticket.id,
         user_id:user.id,
         description,
-        status_note_id
+        status_note_id:status_note.id
     })
+
+    createHistory({
+        ticket_id:ticket.id,
+        user_id:user.id,
+        description: 'change note (' + description + `) : update status to ${status_note.name}`
+    });
 
     return res.status(201).json({
         message:"success",
@@ -174,7 +220,7 @@ const deleteNoteTicket = async(req, res)=>{
     })
 
     return res.status(201).json({
-        message:"success",
+        message:"success deleted",
         data:result
     })
 }
@@ -205,6 +251,7 @@ module.exports = {
     getNoteTicketByTicket,
     createNoteTicket,
     updateNoteTicket,
+    // updateStatusNoteTicket,
     deleteNoteTicket,
     hardDeleteNoteTicket
 }

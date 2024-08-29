@@ -15,19 +15,28 @@ const note_ticket = require('./routes/note_ticket.route.js');
 const penempatan = require('./routes/penempatan.route.js');
 const attachment_ticket = require('./routes/attachment_ticket.route.js');
 const attachment_note_ticket = require('./routes/attachment_note_ticket.route.js');
+const slider = require('./routes/slider.route.js');
 const errorHandlerMiddleware = require('./middleware/error-handler.js');
 const not_found = require('./middleware/not_found.js');
 const cors = require('cors');
 const session = require('express-session');
+const SequelizeStore = require('connect-session-sequelize');
+const db = require('./models/index.js');
 
 const app = express();
 dotenv.config();
+
+const sessionStore = SequelizeStore(session.Store);
+
+const store = new sessionStore({
+    db:db.sequelize
+});
 
 app.use(session({
     secret: process.env.SESS_SECRET,
     resave: false,
     saveUninitialized: true,
-    // store:store,
+    store:store,
     cookie: {
         secure: 'auto',
         expires: 1000 * 60 * 60
@@ -56,6 +65,7 @@ app.use('/penempatan',penempatan);
 app.use('/note_ticket',note_ticket);
 app.use('/attachment_ticket',attachment_ticket);
 app.use('/attachment_note_ticket',attachment_note_ticket);
+app.use('/slider',slider);
 app.use(errorHandlerMiddleware);
 app.use(not_found);
 

@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      history_ticket.belongsTo(models.user,{
+        foreignKey:"user_id"
+      })
     }
   }
   history_ticket.init({
@@ -21,7 +24,8 @@ module.exports = (sequelize, DataTypes) => {
     user_id: DataTypes.INTEGER,
     ticket_id: DataTypes.INTEGER,
     description: DataTypes.STRING,
-    is_delete: DataTypes.BOOLEAN
+    is_delete: DataTypes.BOOLEAN,
+    created_at:DataTypes.DATE
   }, {
     sequelize,
     modelName: 'history_ticket',

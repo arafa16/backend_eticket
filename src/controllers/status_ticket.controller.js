@@ -1,6 +1,16 @@
 const {status_ticket: statusTicketModel} = require('../models')
 
 const getStatusTickets = async(req, res) => {
+
+    const result = await statusTicketModel.findAll();
+    
+    return res.status(200).json({
+        message:"success",
+        data:result
+    })
+}
+
+const getStatusTicketsTable = async(req, res) => {
     const {uuid, name, sort, is_delete} = req.query;
 
     const queryObject = {};
@@ -63,6 +73,20 @@ const getStatusTicketById = async(req, res) => {
     const result = await statusTicketModel.findOne({
         where:{
             uuid:req.params.uuid
+        }
+    });
+
+    return res.status(200).json({
+        message:'success',
+        data:result
+    })
+}
+
+const getStatusTicketByCode = async(req, res) => {
+    
+    const result = await statusTicketModel.findOne({
+        where:{
+            sequence:req.params.code
         }
     });
 
@@ -179,8 +203,10 @@ const hardDeleteStatusTicket = async(req, res) => {
 
 module.exports = {
     getStatusTickets,
+    getStatusTicketsTable,
     getStatusTicketSelect,
     getStatusTicketById,
+    getStatusTicketByCode,
     createStatusTicket,
     updateStatusTicket,
     deleteStatusTicket,

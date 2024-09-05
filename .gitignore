@@ -2,3 +2,5 @@
 node_modules
 src/public/attachment_ticket/*.*
 src/public/attachment_note_ticket/*.*
+src/public/photo/*.*
+src/public/slide/*.*

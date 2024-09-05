@@ -22,7 +22,10 @@ module.exports = (sequelize, DataTypes) => {
     sequence: DataTypes.INTEGER,
     is_select: DataTypes.BOOLEAN,
     is_active: DataTypes.BOOLEAN,
-    is_delete: DataTypes.BOOLEAN
+    is_delete: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: 0
+    },
   }, {
     sequelize,
     modelName: 'status_note',

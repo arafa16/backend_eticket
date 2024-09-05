@@ -1,7 +1,7 @@
 const {status_note: statusNoteModel} = require('../models')
 
 const getStatusNotes = async(req, res) => {
-    const {uuid, name, sort, is_delete} = req.query;
+    const {uuid, name, sort, is_select, is_delete} = req.query;
 
     const queryObject = {};
     let sortList = {};

@@ -48,7 +48,42 @@ const getUsers = async(req, res) => {
         where:queryObject,
         limit,
         offset,
+        include:[
+            {
+                model:penempatanModel
+            },
+            {
+                model:statusUserModel
+            }
+        ],
         order:[sortList]
+    });
+
+    return res.status(200).json({
+        message:"success",
+        data:result
+    })
+
+}
+
+const getUserById = async(req, res) => {
+    const {uuid} = req.params;
+
+    const result = await userModel.findOne({
+        where:{
+            uuid
+        },
+        include:[
+            {
+                model:penempatanModel
+            },
+            {
+                model:statusUserModel
+            },
+            {
+                model:devisiModel
+            }
+        ]
     });
 
     return res.status(200).json({
@@ -159,7 +194,7 @@ const createUser = async(req, res) => {
 
 const updateUser = async(req, res) => {
     const {uuid} = req.params;
-    const {name, email, nomor_hp, devisi_uuid, penempatan_uuid, status_user_uuid} = req.body;
+    const {name, email, nomor_hp, devisi_uuid, penempatan_uuid, status_user_uuid, is_executor, is_delete} = req.body;
 
     const user = await userModel.findOne({
         where:{
@@ -221,7 +256,9 @@ const updateUser = async(req, res) => {
         nomor_hp,
         devisi_id:devisi.id,
         penempatan_id:penempatan.id,
-        status_user_id:status_user.id
+        status_user_id:status_user.id,
+        is_executor,
+        is_delete
     });
 
     res.status(201).json({
@@ -378,6 +415,7 @@ module.exports = {
     getUserSelect,
     createUser,
     updateUser,
+    getUserById,
     updatePassword,
     deleteUser,
     hardDeleteUser,

@@ -9,6 +9,21 @@ const getSLiders = async(req, res)=>{
     const result = await sliderModel.findAll({
         where:{
             is_delete:false
+        },
+        order:[['sequence', 'ASC']]
+    });
+
+    return res.status(200).json({
+        data:result,
+        message:"success"
+    })
+}
+
+const getSLiderById = async(req, res)=>{
+    
+    const result = await sliderModel.findOne({
+        where:{
+            uuid:req.params.uuid
         }
     });
 
@@ -18,8 +33,23 @@ const getSLiders = async(req, res)=>{
     })
 }
 
+const getSLiderTable = async(req, res)=>{
+
+    const result = await sliderModel.findAndCountAll({
+        where:{
+            is_delete:false
+        },
+        order:[['sequence', 'ASC']]
+    });
+
+    return res.status(200).json({
+        data:result,
+        message:"success"
+    })
+}
+
 const createSlide = async(req, res) => {
-    const {sequence} = req.body;
+    const {sequence, name} = req.body;
 
     const file = req.files.file;
     const ext = path.extname(file.name);
@@ -34,7 +64,7 @@ const createSlide = async(req, res) => {
         if(err) return res.status(500).json({message: err.message});
         try {
             await sliderModel.create({
-                name:file.name,
+                name:name,
                 file_name,
                 file_link,
                 sequence:sequence,
@@ -47,7 +77,33 @@ const createSlide = async(req, res) => {
     });
 }
 
+const deleteSLider = async(req, res)=>{
+
+    const result = await sliderModel.findOne({
+        where:{
+            uuid:req.params.uuid
+        }
+    });
+
+    if(!result){
+        return res.status(401).json({
+            data:result,
+            message:"not found"
+        })
+    }
+
+    await result.destroy();
+
+    return res.status(200).json({
+        data:result,
+        message:"success"
+    })
+}
+
 module.exports = {
     createSlide,
-    getSLiders
+    getSLiders,
+    getSLiderTable,
+    deleteSLider,
+    getSLiderById
 }

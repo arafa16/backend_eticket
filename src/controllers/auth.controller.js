@@ -1,4 +1,4 @@
-const {user : userModel, status_user:statusUserModel} = require('../models');
+const {user : userModel, status_user:statusUserModel, privilege:privilegeModel} = require('../models');
 const argon = require('argon2');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
@@ -126,7 +126,12 @@ const getMe = async(req, res) => {
         },
         attributes:{
             exclude:['id','password']
-        }
+        },
+        include:[
+            {
+                model:privilegeModel
+            }
+        ]
     })
 
     return res.status(200).json({

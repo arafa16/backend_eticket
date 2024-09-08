@@ -1,11 +1,11 @@
 const {privilege : privilegeModel, user: userModel} = require('../models');
 
-const getByUser = async(req, res)=>{
-    const {name} = req.params;
+const getById = async(req, res)=>{
+    const {uuid} = req.params;
 
     const privilege = await privilegeModel.findOne({
         where:{
-            name
+            uuid
         }
     });
 
@@ -21,17 +21,15 @@ const getByUser = async(req, res)=>{
     })
 }
 
-const createByUser = async(req, res)=>{
-    const {name} = req.params;
+const createById = async(req, res)=>{
+    const {uuid} = req.params;
     const {dashboard, ticket_executor, ticket_requestor, entity, admin} = req.body;
 
     const privilege = await privilegeModel.findOne({
         where:{
-            name
+            uuid
         }
     });
-
-    console.log(privilege, 'privilege')
 
     if(privilege !== null){
         return res.status(404).json({
@@ -39,20 +37,7 @@ const createByUser = async(req, res)=>{
         })
     }
 
-    const user = await userModel.findOne({
-        where:{
-            name
-        }
-    });
-
-    if(!user){
-        return res.status(404).json({
-            message:"user not found"
-        })
-    }
-
     const result = await privilegeModel.create({
-        name,
         dashboard,
         ticket_requestor,
         ticket_executor,
@@ -66,13 +51,13 @@ const createByUser = async(req, res)=>{
     })
 }
 
-const updateByUser = async(req, res)=>{
-    const {name} = req.params;
+const updateById = async(req, res)=>{
+    const {uuid} = req.params;
     const {dashboard, ticket_executor, ticket_requestor, entity, admin} = req.body;
 
     const privilege = await privilegeModel.findOne({
         where:{
-            name
+            uuid
         }
     });
 
@@ -96,12 +81,12 @@ const updateByUser = async(req, res)=>{
     })
 }
 
-const hardDeleteByUser = async(req, res)=>{
-    const {name} = req.params;
+const hardDeleteById = async(req, res)=>{
+    const {uuid} = req.params;
     
     const privilege = await privilegeModel.findOne({
         where:{
-            name
+            uuid
         }
     });
 
@@ -120,8 +105,8 @@ const hardDeleteByUser = async(req, res)=>{
 }
 
 module.exports = {
-    getByUser,
-    createByUser,
-    updateByUser,
-    hardDeleteByUser
+    getById,
+    createById,
+    updateById,
+    hardDeleteById
 }

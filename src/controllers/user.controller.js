@@ -82,6 +82,9 @@ const getUserById = async(req, res) => {
             },
             {
                 model:devisiModel
+            },
+            {
+                model:privilegeModel
             }
         ]
     });

@@ -82,6 +82,8 @@ const getTypeTicketByUuid = async(req, res) => {
 const createTypeTicket = async(req, res) => {
     const {name, sequence, is_select, is_active} = req.body; 
 
+    console.log(name, sequence, is_select, is_active, 'value');
+
     if(!name || !sequence){
         return res.status(401).json({
             message:"name or sequence don't null"

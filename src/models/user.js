@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
       user.belongsTo(models.devisi,{
         foreignKey:"devisi_id"
       });
+      user.belongsTo(models.privilege,{
+        foreignKey:"privilege_id"
+      });
       user.hasMany(models.history_ticket);
     }
   }
@@ -35,6 +38,7 @@ module.exports = (sequelize, DataTypes) => {
     photo_link: DataTypes.STRING,
     password: DataTypes.STRING,
     nomor_hp: DataTypes.STRING,
+    privilege_id: DataTypes.INTEGER,
     devisi_id: DataTypes.INTEGER,
     penempatan_id: DataTypes.INTEGER,
     status_user_id: DataTypes.INTEGER,

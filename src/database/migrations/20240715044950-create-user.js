@@ -13,8 +13,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       name: {
-        type: Sequelize.STRING,
-        unique:true
+        type: Sequelize.STRING
       },
       photo: {
         type: Sequelize.STRING
@@ -33,6 +32,13 @@ module.exports = {
       },
       nomor_hp: {
         type: Sequelize.STRING
+      },
+      privilege_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "privileges",
+          key: "id",
+        },
       },
       devisi_id: {
         type: Sequelize.INTEGER,

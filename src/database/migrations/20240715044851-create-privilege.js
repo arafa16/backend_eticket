@@ -12,14 +12,6 @@ module.exports = {
       uuid: {
         type: Sequelize.STRING,
       },
-      name:{
-        type: Sequelize.STRING,
-        references: {
-          model: "users",
-          key: "name",
-        },
-        unique:true
-      },
       dashboard: {
         type: Sequelize.BOOLEAN
       },

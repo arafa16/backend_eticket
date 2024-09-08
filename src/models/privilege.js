@@ -18,7 +18,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       defaultValue: DataTypes.UUIDV4
     },
-    name:DataTypes.STRING,
     dashboard: DataTypes.BOOLEAN,
     ticket_requestor: DataTypes.BOOLEAN,
     ticket_executor: DataTypes.BOOLEAN,

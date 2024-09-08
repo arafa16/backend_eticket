@@ -9,7 +9,6 @@ module.exports = {
       {
         id:1,
         uuid:uuid.v4(),
-        name:'admin',
         dashboard:1,
         ticket_requestor:1,
         ticket_executor:1,

@@ -83,7 +83,7 @@ const getStatusTicketById = async(req, res) => {
 }
 
 const getStatusTicketByCode = async(req, res) => {
-    
+    console.log(req.params.code, 'code')
     const result = await statusTicketModel.findOne({
         where:{
             sequence:req.params.code

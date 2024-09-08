@@ -9,7 +9,7 @@ module.exports = {
       {
         id:1,
         uuid:uuid.v4(),
-        name: 'pertanian',
+        name: 'Rukan',
         sequence:1,
         created_at: new Date(),
         updated_at: new Date(),
@@ -17,7 +17,7 @@ module.exports = {
       {
         id:2,
         uuid:uuid.v4(),
-        name: 'rukan',
+        name: 'Pertanian',
         sequence:2,
         created_at: new Date(),
         updated_at: new Date(),
@@ -25,7 +25,7 @@ module.exports = {
       {
         id:3,
         uuid:uuid.v4(),
-        name: 'tebet',
+        name: 'Tebet',
         sequence:3,
         created_at: new Date(),
         updated_at: new Date(),
@@ -33,7 +33,7 @@ module.exports = {
       {
         id:4,
         uuid:uuid.v4(),
-        name: 'cipinang',
+        name: 'Bandung',
         sequence:4,
         created_at: new Date(),
         updated_at: new Date(),
@@ -41,7 +41,7 @@ module.exports = {
       {
         id:5,
         uuid:uuid.v4(),
-        name: 'yogyakarta',
+        name: 'Yogyakarta',
         sequence:5,
         created_at: new Date(),
         updated_at: new Date(),
@@ -49,7 +49,7 @@ module.exports = {
       {
         id:6,
         uuid:uuid.v4(),
-        name: 'bandung',
+        name: 'Cipinang',
         sequence:6,
         created_at: new Date(),
         updated_at: new Date(),
@@ -57,7 +57,7 @@ module.exports = {
       {
         id:7,
         uuid:uuid.v4(),
-        name: 'surabaya',
+        name: 'Surabaya',
         sequence:7,
         created_at: new Date(),
         updated_at: new Date(),
@@ -65,7 +65,7 @@ module.exports = {
       {
         id:8,
         uuid:uuid.v4(),
-        name: 'palembang',
+        name: 'Makasar',
         sequence:8,
         created_at: new Date(),
         updated_at: new Date(),
@@ -73,7 +73,23 @@ module.exports = {
       {
         id:9,
         uuid:uuid.v4(),
-        name: 'medan',
+        name: 'Medan',
+        sequence:9,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id:10,
+        uuid:uuid.v4(),
+        name: 'Palembang',
+        sequence:9,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id:11,
+        uuid:uuid.v4(),
+        name: 'Balikpapan',
         sequence:9,
         created_at: new Date(),
         updated_at: new Date(),

@@ -9,23 +9,23 @@ const {
     devisi: devisiModel, 
     privilege: privilegeModel,
 } = require('../models');
+const { Op } = require('sequelize');
 
 const getUsers = async(req, res) => {
-    const {uuid, name, email, sort, is_delete} = req.query;
+    const {uuid, search, sort, is_delete} = req.query;
 
     const queryObject = {};
+    const querySearchObject = {};
     let sortList = {};
+
 
     if(uuid){
         queryObject.uuid = uuid
     }
 
-    if(name){
-        queryObject.name = name
-    }
-
-    if(email){
-        queryObject.email = email
+    if(search !== null){
+        querySearchObject.name = {[Op.like]:`%${search}%`}
+        querySearchObject.email = {[Op.like]:`%${search}%`}
     }
 
     const page = Number(req.query.page) || 1;
@@ -41,11 +41,13 @@ const getUsers = async(req, res) => {
     if(is_delete){
         queryObject.is_delete = is_delete
     }else{
-        queryObject.is_delete = 0
+        queryObject.is_delete = false
     }
     
     const result = await userModel.findAndCountAll({
-        where:queryObject,
+        where:[
+            queryObject,
+            {[Op.or]:querySearchObject}],
         limit,
         offset,
         include:[
@@ -58,6 +60,9 @@ const getUsers = async(req, res) => {
         ],
         order:[sortList]
     });
+
+    console.log(queryObject, 'queryObject')
+
 
     return res.status(200).json({
         message:"success",
@@ -179,14 +184,25 @@ const createUser = async(req, res) => {
         })
     }
 
+    const hashPassword = await argon.hash(password);
+
+    const privilege = await privilegeModel.create({
+        dashboard:true,
+        ticket_requestor:true,
+        ticket_executor:false,
+        entity:false,
+        admin:false,
+    })
+
     const result = await userModel.create({
         name,
         email,
-        password,
+        password:hashPassword,
         nomor_hp,
         devisi_id:devisi.id,
         penempatan_id:penempatan.id,
-        status_user_id:status_user.id
+        status_user_id:status_user.id,
+        privilege_id:privilege.id
     });
 
     res.status(201).json({

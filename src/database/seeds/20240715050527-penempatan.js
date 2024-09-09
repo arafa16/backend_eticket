@@ -97,7 +97,7 @@ module.exports = {
       {
         id:12,
         uuid:uuid.v4(),
-        name: 'SUKABUMI',
+        name: 'Sukabumi',
         sequence:12,
         created_at: new Date(),
         updated_at: new Date(),
@@ -105,7 +105,7 @@ module.exports = {
       {
         id:13,
         uuid:uuid.v4(),
-        name: 'SEMARANG',
+        name: 'Semarang',
         sequence:13,
         created_at: new Date(),
         updated_at: new Date(),

@@ -54,6 +54,14 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
       },
+      {
+        id:7,
+        uuid:uuid.v4(),
+        name: 'regional',
+        sequence:6,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
     ])
   },
 

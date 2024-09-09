@@ -16,13 +16,16 @@ module.exports = {
         type: Sequelize.STRING
       },
       photo: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       photo_name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       photo_link: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       email: {
         type: Sequelize.STRING
@@ -31,7 +34,8 @@ module.exports = {
         type: Sequelize.STRING
       },
       nomor_hp: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       privilege_id: {
         type: Sequelize.INTEGER,
@@ -42,6 +46,7 @@ module.exports = {
       },
       devisi_id: {
         type: Sequelize.INTEGER,
+        allowNull: true,
         references: {
           model: "devisis",
           key: "id",
@@ -49,6 +54,7 @@ module.exports = {
       },
       penempatan_id: {
         type: Sequelize.INTEGER,
+        allowNull: true,
         references: {
           model: "penempatans",
           key: "id",
@@ -56,6 +62,7 @@ module.exports = {
       },
       status_user_id: {
         type: Sequelize.INTEGER,
+        allowNull: true,
         references: {
           model: "status_users",
           key: "id",
@@ -70,11 +77,11 @@ module.exports = {
         defaultValue: 0
       },
       created_at: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE
       },
       updated_at: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE
       }
     });

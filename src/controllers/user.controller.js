@@ -334,8 +334,7 @@ const deleteUser = async(req, res) => {
 
     const result = await userModel.findOne({
         where:{
-            uuid:uuid,
-            is_delete:false
+            uuid:uuid
         }
     });
 
@@ -347,6 +346,31 @@ const deleteUser = async(req, res) => {
 
     result.update({
         is_delete:true
+    });
+
+    return res.status(200).json({
+        message:'success',
+        data:result
+    })
+}
+
+const restoreUser = async(req, res) => {
+    const {uuid} = req.params;
+
+    const result = await userModel.findOne({
+        where:{
+            uuid:uuid
+        }
+    });
+
+    if(!result){
+        return res.status(404).json({
+            message:"user not found"
+        })
+    }
+
+    result.update({
+        is_delete:false
     });
 
     return res.status(200).json({
@@ -437,6 +461,7 @@ module.exports = {
     getUserById,
     updatePassword,
     deleteUser,
+    restoreUser,
     hardDeleteUser,
     setPhotoProfile
 }

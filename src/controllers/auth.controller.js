@@ -25,6 +25,15 @@ const register = async(req, res) => {
     }
 
     const hasPassword = await argon.hash(password);
+
+    const privilege = await privilegeModel.create({
+        dashboard:true,
+        ticket_requestor:true,
+        ticket_executor:false,
+        entity:false,
+        admin:false,
+    })
+
     const response = await userModel.create({
         name,
         email,
@@ -33,8 +42,11 @@ const register = async(req, res) => {
         devisi_id,
         penempatan_id,
         status_user_id:1,
+        privilege_id:privilege.id,
         is_delete:0
     });
+
+    
 
     const user = await userModel.findOne({
         where:{

@@ -9,7 +9,7 @@ const {
     devisi: devisiModel, 
     privilege: privilegeModel,
 } = require('../models');
-const { Op } = require('sequelize');
+const { Op, where } = require('sequelize');
 
 const getUsers = async(req, res) => {
     const {uuid, search, sort, is_delete} = req.query;
@@ -117,8 +117,21 @@ const getExecutorSelect = async(req, res) => {
 }
 
 const getUserSelect = async(req, res) => {
+    const {is_delete} = req.query;
+
+    let deleteValue = 0;
+
+    if(is_delete !== undefined){
+        deleteValue = is_delete
+    }else{
+        deleteValue = 0;
+    }
     
-    const result = await userModel.findAll();
+    const result = await userModel.findAll({
+        where:{
+            is_delete:deleteValue
+        }
+    });
 
     return res.status(200).json({
         message:"success",

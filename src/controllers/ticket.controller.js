@@ -157,13 +157,21 @@ const getTicketById = async(req, res) => {
 }
 
 const getTicketByUser = async(req, res) => {
-    const {uuid} = req.query;
+    const {uuid, is_delete} = req.query;
 
     const user = await userModel.findOne({
         where:{
             uuid
         }
     })
+
+    let deleteValue = 0;
+
+    if(is_delete !== undefined){
+        deleteValue = is_delete
+    }else{
+        deleteValue = 0;
+    }
 
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
@@ -175,7 +183,8 @@ const getTicketByUser = async(req, res) => {
             user_id:user.id,
             status_ticket_id:{
                 [Op.not]:notStatus
-            }
+            },
+            is_delete:deleteValue
         },
         include:[
             {
@@ -220,12 +229,21 @@ const getTicketByPic = async(req, res) => {
     const offset = Number(page - 1) * limit;
     const notStatus = req.query.notStatus.split(',');
 
+    let deleteValue = 0;
+
+    if(is_delete !== undefined){
+        deleteValue = is_delete
+    }else{
+        deleteValue = 0;
+    }
+
     const result = await ticketModel.findAndCountAll({
         where:{
             executor_id:user.id,
             status_ticket_id:{
                 [Op.not]:notStatus
-            }
+            },
+            is_delete:deleteValue
         },
         include:[
             {

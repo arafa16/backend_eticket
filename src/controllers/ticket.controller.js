@@ -6,7 +6,8 @@ const {
     type_ticket: typeTicketModel,
     devisi: devisiModel,
     penempatan: penempatanModel,
-    history_ticket: historyTicketModel
+    history_ticket: historyTicketModel,
+    attachment_ticket: attachmentTicketModal
 } = require('../models');
 
 const {createHistory} = require('./history_ticket.controller');
@@ -128,6 +129,9 @@ const getTicketById = async(req, res) => {
             {
                 model:statusTicketModel
             },
+            {
+                model:attachmentTicketModal
+            }
         ]
     });
 

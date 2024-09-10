@@ -60,7 +60,7 @@ const getStatusUserSelect = async(req, res) => {
 
 const getStatusUserById = async(req, res) => {
     
-    const result = await statusUserModel.findAll({
+    const result = await statusUserModel.findOne({
         where:{
             uuid:req.params.uuid
         }

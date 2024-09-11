@@ -216,7 +216,7 @@ const getTicketByUser = async(req, res) => {
 }
 
 const getTicketByPic = async(req, res) => {
-    const {uuid} = req.query;
+    const {uuid, is_delete} = req.query;
 
     const user = await userModel.findOne({
         where:{

@@ -41,7 +41,7 @@ const register = async(req, res) => {
         nomor_hp,
         devisi_id,
         penempatan_id,
-        status_user_id:1,
+        status_user_id:2,
         privilege_id:privilege.id,
         is_delete:0
     });

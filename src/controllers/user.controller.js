@@ -61,7 +61,7 @@ const getUsers = async(req, res) => {
         order:[sortList]
     });
 
-    console.log(queryObject, 'queryObject')
+    console.log(querySearchObject, 'queryObject')
 
 
     return res.status(200).json({

@@ -13,9 +13,12 @@ const {
 const {createHistory} = require('./history_ticket.controller');
 
 const getTickets = async(req, res) => {
-    const {uuid, code, year, name, code_ticket, sort, is_delete} = req.query;
+    const {uuid, code, year, name, code_ticket, sort, is_delete, search} = req.query;
 
     const queryObject = {};
+    const querySearchObject = {};
+    const querySearchUser = {};
+
     let sortList = {};
 
     if(uuid){
@@ -44,6 +47,14 @@ const getTickets = async(req, res) => {
         queryObject.is_delete = 0
     }
 
+    const notStatus = req.query.notStatus.split(',');
+
+    if(notStatus){
+        queryObject.status_ticket_id = {
+            [Op.not]:notStatus
+        }
+    }
+
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
     const offset = Number(page - 1) * limit;
@@ -54,8 +65,17 @@ const getTickets = async(req, res) => {
         sortList ='code';
     }
 
+    if(search !== null){
+        querySearchObject.code = {[Op.like]:`%${search}%`}
+        querySearchObject.year = {[Op.like]:`%${search}%`}
+        querySearchObject.code_ticket = {[Op.like]:`%${search}%`}
+    }
+
     const result = await ticketModel.findAndCountAll({
-        where:queryObject,
+        where:[
+            queryObject,
+            {[Op.or]:querySearchObject}
+        ],
         limit,
         offset,
         order:[sortList],
@@ -157,7 +177,11 @@ const getTicketById = async(req, res) => {
 }
 
 const getTicketByUser = async(req, res) => {
-    const {uuid, is_delete} = req.query;
+    const {uuid, search, is_delete} = req.query;
+
+    const queryObject = {};
+    const querySearchObject = {};
+    const querySearchUser = {};
 
     const user = await userModel.findOne({
         where:{
@@ -165,27 +189,46 @@ const getTicketByUser = async(req, res) => {
         }
     })
 
-    let deleteValue = 0;
+    // let deleteValue = 0;
 
-    if(is_delete !== undefined){
-        deleteValue = is_delete
-    }else{
-        deleteValue = 0;
-    }
+    // if(is_delete !== undefined){
+    //     deleteValue = is_delete
+    // }else{
+    //     deleteValue = 0;
+    // }
 
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
     const offset = Number(page - 1) * limit;
     const notStatus = req.query.notStatus.split(',');
 
+    if(user){
+        queryObject.user_id = user.id
+    }
+
+    if(notStatus){
+        queryObject.status_ticket_id = {
+            [Op.not]:notStatus
+        }
+    }
+
+    if(is_delete){
+        queryObject.is_delete = is_delete
+    }else{
+        queryObject.is_delete = 0
+    }
+
+    if(search !== null){
+        querySearchObject.code = {[Op.like]:`%${search}%`}
+        querySearchObject.year = {[Op.like]:`%${search}%`}
+        querySearchObject.code_ticket = {[Op.like]:`%${search}%`}
+    }
+
     const result = await ticketModel.findAndCountAll({
-        where:{
-            user_id:user.id,
-            status_ticket_id:{
-                [Op.not]:notStatus
-            },
-            is_delete:deleteValue
-        },
+        where:[
+            queryObject,
+            {[Op.or]:querySearchObject}
+        ],
         include:[
             {
                 model:typeTicketModel
@@ -216,35 +259,50 @@ const getTicketByUser = async(req, res) => {
 }
 
 const getTicketByPic = async(req, res) => {
-    const {uuid, is_delete} = req.query;
+    const {uuid, search, is_delete} = req.query;
+
+    const queryObject = {};
+    const querySearchObject = {};
+    const querySearchUser = {};
 
     const user = await userModel.findOne({
         where:{
-            uuid
+            uuid:uuid
         }
-    })
+    });
 
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
     const offset = Number(page - 1) * limit;
     const notStatus = req.query.notStatus.split(',');
 
-    let deleteValue = 0;
+    if(user){
+        queryObject.executor_id = user.id
+    }
 
-    if(is_delete !== undefined){
-        deleteValue = is_delete
+    if(notStatus){
+        queryObject.status_ticket_id = {
+            [Op.not]:notStatus
+        }
+    }
+
+    if(is_delete){
+        queryObject.is_delete = is_delete
     }else{
-        deleteValue = 0;
+        queryObject.is_delete = 0
+    }
+
+    if(search !== null){
+        querySearchObject.code = {[Op.like]:`%${search}%`}
+        querySearchObject.year = {[Op.like]:`%${search}%`}
+        querySearchObject.code_ticket = {[Op.like]:`%${search}%`}
     }
 
     const result = await ticketModel.findAndCountAll({
-        where:{
-            executor_id:user.id,
-            status_ticket_id:{
-                [Op.not]:notStatus
-            },
-            is_delete:deleteValue
-        },
+        where:[
+            queryObject,
+            {[Op.or]:querySearchObject}
+        ],
         include:[
             {
                 model:typeTicketModel

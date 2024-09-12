@@ -9,7 +9,7 @@ module.exports = {
       {
         id:1,
         uuid:uuid.v4(),
-        name: 'administrator',
+        name: 'IT',
         sequence:1,
         created_at: new Date(),
         updated_at: new Date(),

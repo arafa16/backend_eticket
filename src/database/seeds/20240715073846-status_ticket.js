@@ -40,16 +40,8 @@ module.exports = {
       {
         id:5,
         uuid:uuid.v4(),
-        name:'panding',
-        sequence:5,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
-        id:6,
-        uuid:uuid.v4(),
         name:'cancel',
-        sequence:6,
+        sequence:5,
         created_at: new Date(),
         updated_at: new Date(),
       }

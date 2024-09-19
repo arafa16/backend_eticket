@@ -8,13 +8,15 @@ const {
     hardDeleteTicket, 
     getTicketByUser, 
     getTicketById,
-    getTicketByPic
+    getTicketByPic,
+    getCountTickets
 } = require('../controllers/ticket.controller.js');
 const {verifyToken} = require('../middleware/auth.middleware');
 
 const router = express.Router();
 
 router.get('/', verifyToken, getTickets);
+router.get('/count', verifyToken, getCountTickets);
 router.get('/data', verifyToken, getTicketById);
 router.get('/user', verifyToken, getTicketByUser);
 router.get('/pic', verifyToken, getTicketByPic);

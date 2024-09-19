@@ -1,4 +1,4 @@
-const { Op } = require('sequelize');
+const { Op, where } = require('sequelize');
 const {
     ticket: ticketModel, 
     status_ticket: statusTicketModel, 
@@ -111,6 +111,92 @@ const getTickets = async(req, res) => {
     return res.status(200).json({
         message: 'success',
         data: result
+    })
+}
+
+const getCountTickets = async(req, res) => {
+    const {uuid_user, uuid_pic} = req.query;
+
+    const queryObject = {};
+
+    if(uuid_user){
+        const user = await userModel.findOne({
+            where:{
+                uuid:uuid_user
+            }
+        });
+
+        queryObject.user_id = user.id
+    }
+
+    if(uuid_pic){
+        const user = await userModel.findOne({
+            where:{
+                uuid:uuid_pic
+            }
+        });
+
+        if(user !== null){
+            queryObject.executor_id = user.id
+        }
+    }
+
+    const draft = await ticketModel.count({
+        where:[
+            queryObject,
+            {
+            status_ticket_id:1
+            }
+        ]
+    });
+
+    const pengajuan = await ticketModel.count({
+        where:[
+            queryObject,
+            {
+            status_ticket_id:2
+            }
+        ]
+    });
+
+    const process = await ticketModel.count({
+        where:[
+            queryObject,
+            {
+            status_ticket_id:3
+            }
+        ]
+    });
+
+    const done = await ticketModel.count({
+        where:[
+            queryObject,
+            {
+            status_ticket_id:4
+            }
+        ]
+    });
+
+    const cancel = await ticketModel.count({
+        where:[
+            queryObject,
+            {
+            status_ticket_id:5
+            }
+        ]
+    });
+
+    const all = await ticketModel.count({
+        where:[
+            queryObject
+        ]
+    });
+
+    return res.status(200).json({
+        message: 'success',
+        data: {
+            draft, pengajuan, process, done, cancel, all
+        }
     })
 }
 
@@ -653,6 +739,7 @@ const hardDeleteTicket = async(req, res) => {
 
 module.exports = {
     getTickets,
+    getCountTickets,
     getTicketById,
     createTicket,
     updateTicket,

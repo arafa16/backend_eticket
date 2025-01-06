@@ -145,7 +145,8 @@ const getCountTickets = async(req, res) => {
         where:[
             queryObject,
             {
-            status_ticket_id:1
+            status_ticket_id:1,
+            is_delete:0
             }
         ]
     });
@@ -154,7 +155,8 @@ const getCountTickets = async(req, res) => {
         where:[
             queryObject,
             {
-            status_ticket_id:2
+            status_ticket_id:2,
+            is_delete:0
             }
         ]
     });
@@ -163,7 +165,8 @@ const getCountTickets = async(req, res) => {
         where:[
             queryObject,
             {
-            status_ticket_id:3
+            status_ticket_id:3,
+            is_delete:0
             }
         ]
     });
@@ -172,7 +175,8 @@ const getCountTickets = async(req, res) => {
         where:[
             queryObject,
             {
-            status_ticket_id:4
+            status_ticket_id:4,
+            is_delete:0
             }
         ]
     });
@@ -181,7 +185,8 @@ const getCountTickets = async(req, res) => {
         where:[
             queryObject,
             {
-            status_ticket_id:5
+            status_ticket_id:5,
+            is_delete:0
             }
         ]
     });

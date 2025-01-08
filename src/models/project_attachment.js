@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class attachment_project_note extends Model {
+  class project_attachment extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,25 +11,25 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      attachment_project_note.belongsTo(models.project_note,{
-        foreignKey:"project_note_id"
+      project_attachment.belongsTo(models.project,{
+        foreignKey:"project_id"
       });
     }
   }
-  attachment_project_note.init({
+  project_attachment.init({
     uuid: {
       type: DataTypes.STRING,
       defaultValue: DataTypes.UUIDV4
     },
-    project_note_id: DataTypes.INTEGER,
+    project_id: DataTypes.INTEGER,
     name: DataTypes.STRING,
     file_name: DataTypes.STRING,
     file_link: DataTypes.STRING,
     is_delete: DataTypes.BOOLEAN
   }, {
     sequelize,
-    modelName: 'attachment_project_note',
+    modelName: 'project_attachment',
     underscored: true,
   });
-  return attachment_project_note;
+  return project_attachment;
 };

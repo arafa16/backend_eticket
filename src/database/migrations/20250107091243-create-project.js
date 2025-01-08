@@ -12,13 +12,20 @@ module.exports = {
       uuid: {
         type: Sequelize.STRING
       },
-      code_project: {
+      code: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      display_code: {
         type: Sequelize.STRING,
         allowNull: true
       },
       date: {
         type: Sequelize.DATE,
         allowNull: true
+      },
+      year:{
+        type: Sequelize.STRING,
       },
       user_id: {
         type: Sequelize.INTEGER,

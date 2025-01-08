@@ -20,6 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     name: DataTypes.STRING,
     sequence: DataTypes.INTEGER,
+    is_select: DataTypes.BOOLEAN,
+    is_active: DataTypes.BOOLEAN,
     is_delete: DataTypes.BOOLEAN
   }, {
     sequelize,

@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
       project.belongsTo(models.project_type,{
         foreignKey:"project_type_id"
       });
+
+      project.hasMany(models.project_attachment);
+
+      project.hasMany(models.project_history);
     }
   }
   project.init({
@@ -31,8 +35,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       defaultValue: DataTypes.UUIDV4
     },
-    code_project: DataTypes.STRING,
+    code: DataTypes.STRING,
+    display_code: DataTypes.STRING,
     date: DataTypes.DATE,
+    year: DataTypes.STRING,
     user_id: DataTypes.INTEGER,
     description: DataTypes.TEXT,
     executor_id: DataTypes.INTEGER,

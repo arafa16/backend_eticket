@@ -205,8 +205,10 @@ const getDataById = async(req, res) => {
 
     const {uuid} = req.query;
 
+    console.log('uuid', uuid)
+
     const queryObject = {};
-    const history = null;
+    const history = {};
 
     if(uuid){
         queryObject.uuid = uuid
@@ -239,31 +241,17 @@ const getDataById = async(req, res) => {
             },
             {
                 model:projectAttachmentModal
+            },
+            {
+                model:projectHistoryModel
             }
         ]
     });
-
-    if(result){
-        history = await projectHistoryModel.findAll({
-            where:{
-                project_id:result.id
-            },
-            order: [
-                ['created_at', 'DESC']
-            ],
-            include:[
-                {
-                    model:userModel
-                }
-            ],
-        });
-    }
     
 
     return res.status(200).json({
         message: 'success',
-        data:result, 
-        history
+        data:result,
     });
 }
 

@@ -19,8 +19,12 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4
     },
     dashboard: DataTypes.BOOLEAN,
+    ticket:DataTypes.BOOLEAN,
     ticket_requestor: DataTypes.BOOLEAN,
     ticket_executor: DataTypes.BOOLEAN,
+    project:DataTypes.BOOLEAN,
+    project_executor: DataTypes.BOOLEAN,
+    project_administrator: DataTypes.BOOLEAN,
     entity: DataTypes.BOOLEAN,
     admin: DataTypes.BOOLEAN
   }, {

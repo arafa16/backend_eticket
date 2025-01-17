@@ -58,6 +58,8 @@ app.use(cors({
 app.use(express.json());
 app.use(express_fileupload());
 app.use(express.static("public"));
+app.use(express.limit('4M'));
+
 //route
 app.use('/auth',auth_router);
 app.use('/user',user_router);

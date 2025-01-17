@@ -13,19 +13,40 @@ module.exports = {
         type: Sequelize.STRING,
       },
       dashboard: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue:1
+      },
+      ticket: {
+        type: Sequelize.BOOLEAN,
+        defaultValue:1
       },
       ticket_requestor: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue:1
       },
       ticket_executor: {
-        type: Sequelize.BOOLEAN
-      }, 
+        type: Sequelize.BOOLEAN,
+        defaultValue:0
+      },
+      project: {
+        type: Sequelize.BOOLEAN,
+        defaultValue:0
+      },
+      project_executor: {
+        type: Sequelize.BOOLEAN,
+        defaultValue:0
+      },
+      project_administrator: {
+        type: Sequelize.BOOLEAN,
+        defaultValue:0
+      },
       entity: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue:0
       },
       admin: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue:0
       },
       created_at: {
         allowNull: false,

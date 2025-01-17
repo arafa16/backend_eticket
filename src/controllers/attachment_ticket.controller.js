@@ -29,11 +29,14 @@ const createAttachmentTicket = async(req, res) => {
     }
 
     const file = req.files.file;
+    const fileSize = file.data.length;
 
     const ext = path.extname(file.name);
     const file_name = crypto.randomUUID()+ext;
     const file_link = `/attachment/ticket/${file_name}`;
     // const allowed_type = ['.png','.jpg','.jpeg','.xlsx','.doc'];
+
+    if(fileSize > 5000000) return res.status(422).json({msg: "Image must be less than 5 MB"});
 
     //filter file type
     // if(!allowed_type.includes(ext.toLowerCase())) return res.status(422).json({msg: "type file not allowed"});

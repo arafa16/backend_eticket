@@ -70,6 +70,8 @@ const getDataByProject = async(req, res)=>{
 const createData = async(req, res)=>{
     const {project_uuid, user_uuid, description, project_note_status_uuid} = req.body;
 
+    console.log("body", req.body);
+
     let project_note_status_id = '';
     let status_note_name = null;
 

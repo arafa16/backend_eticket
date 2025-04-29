@@ -46,7 +46,7 @@ app.use(session({
     store:store,
     cookie: {
         secure: 'auto',
-        expires: 1000 * 60 * 60
+        expires: 1000 * 60 * 60 * process.env.SESS_EXPIRES
     }
 }))
 

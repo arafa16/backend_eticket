@@ -546,7 +546,14 @@ const createData = async(req, res) => {
 
 const updateData = async(req, res) => {
     const {uuid} = req.params;
-    const {user_uuid, name, executor_uuid, description, project_type_uuid, target_date} = req.body;
+    const {
+        user_uuid, 
+        name, 
+        executor_uuid, 
+        description, 
+        project_type_uuid, 
+        target_date
+    } = req.body;
 
     let executor_id = null;
 

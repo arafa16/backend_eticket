@@ -72,7 +72,7 @@ app.use('/type_ticket',type_ticket);
 app.use('/penempatan',penempatan);
 app.use('/note_ticket',note_ticket);
 app.use('/attachment_ticket',attachment_ticket);
-app.use('/project_attachment',project_attachment);
+// app.use('/project_attachment',project_attachment);
 app.use('/attachment_note_ticket',attachment_note_ticket);
 app.use('/slider',slider);
 app.use('/project_type',project_type);

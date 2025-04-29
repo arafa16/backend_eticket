@@ -54,6 +54,9 @@ const getDataByProject = async(req, res)=>{
         include:[
             {
                 model:projectNoteStatusModel
+            },
+            {
+                model:projectModel
             }
         ]
     })

@@ -23,7 +23,16 @@ const getById = async(req, res)=>{
 
 const createById = async(req, res)=>{
     const {uuid} = req.params;
-    const {dashboard, ticket_executor, ticket_requestor, entity, admin} = req.body;
+    const {
+        dashboard, 
+        ticket_executor, 
+        ticket_requestor, 
+        entity,
+        project, 
+        project_executor,
+        project_administrator,
+        admin
+    } = req.body;
 
     const privilege = await privilegeModel.findOne({
         where:{
@@ -42,6 +51,9 @@ const createById = async(req, res)=>{
         ticket_requestor,
         ticket_executor,
         entity,
+        project, 
+        project_executor,
+        project_administrator,
         admin
     })
 
@@ -53,7 +65,16 @@ const createById = async(req, res)=>{
 
 const updateById = async(req, res)=>{
     const {uuid} = req.params;
-    const {dashboard, ticket_executor, ticket_requestor, entity, admin} = req.body;
+    const {
+        dashboard, 
+        ticket_executor, 
+        ticket_requestor, 
+        project, 
+        project_executor,
+        project_administrator,
+        entity, 
+        admin
+    } = req.body;
 
     const privilege = await privilegeModel.findOne({
         where:{
@@ -72,6 +93,9 @@ const updateById = async(req, res)=>{
         ticket_requestor,
         ticket_executor,
         entity,
+        project, 
+        project_executor,
+        project_administrator,
         admin
     })
 

@@ -42,7 +42,7 @@ const createAttachment = async(req, res) => {
         if(err) return res.status(500).json({message: err.message});
         try {
             await projectAttachmentModel.create({
-                ticket_id:ticket.id,
+                project_id:findData.id,
                 name:file.name,
                 file_name,
                 file_link

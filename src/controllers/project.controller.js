@@ -189,7 +189,10 @@ const getCount = async(req, res) => {
 
     const all = await projectModel.count({
         where:[
-            queryObject
+            queryObject,
+            {
+                is_delete:0
+            }
         ]
     });
 
@@ -204,8 +207,6 @@ const getCount = async(req, res) => {
 const getDataById = async(req, res) => {
 
     const {uuid} = req.query;
-
-    console.log('uuid', uuid)
 
     const queryObject = {};
     const history = {};
@@ -243,7 +244,10 @@ const getDataById = async(req, res) => {
                 model:projectAttachmentModal
             },
             {
-                model:projectHistoryModel
+                model:projectHistoryModel,
+                include:{
+                    model:userModel
+                }
             }
         ]
     });
@@ -256,7 +260,7 @@ const getDataById = async(req, res) => {
 }
 
 const getDatasByUser = async(req, res) => {
-    const {uuid, search, is_delete} = req.query;
+    const {search, is_delete} = req.query;
 
     const queryObject = {};
     const querySearchObject = {};
@@ -264,20 +268,21 @@ const getDatasByUser = async(req, res) => {
 
     const user = await userModel.findOne({
         where:{
-            uuid
+            uuid:req.user.uuid
         }
     })
 
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
     const offset = Number(page - 1) * limit;
-    const notStatus = req.query.notStatus.split(',');
-
+    
     if(user){
         queryObject.user_id = user.id
     }
 
-    if(notStatus){
+    if(req.query.notStatus){
+        const notStatus = req.query.notStatus.split(',');
+
         queryObject.project_status_id = {
             [Op.not]:notStatus
         }
@@ -290,6 +295,7 @@ const getDatasByUser = async(req, res) => {
     }
 
     if(search !== null){
+        querySearchObject.name = {[Op.like]:`%${search}%`}
         querySearchObject.code = {[Op.like]:`%${search}%`}
         querySearchObject.year = {[Op.like]:`%${search}%`}
     }
@@ -363,6 +369,7 @@ const getDatasByPic = async(req, res) => {
     }
 
     if(search !== null){
+        querySearchObject.name = {[Op.like]:`%${search}%`}
         querySearchObject.code = {[Op.like]:`%${search}%`}
         querySearchObject.year = {[Op.like]:`%${search}%`}
     }
@@ -402,13 +409,13 @@ const getDatasByPic = async(req, res) => {
 }
 
 const createData = async(req, res) => {
-    const {user_uuid, executor_uuid, description, project_status_uuid, project_type_uuid} = req.body;
+    const {name, user_uuid, executor_uuid, description, project_status_uuid, project_type_uuid, target_date} = req.body;
     
     let executor_id = ''
     let user_id = null
 
-    if(!description || !project_status_uuid || !project_type_uuid){
-        return res.status(401).jso({
+    if(!description || !project_type_uuid){
+        return res.status(401).json({
             message: "field can't null"
         })
     }
@@ -456,16 +463,32 @@ const createData = async(req, res) => {
         executor_id=executor.id;
     }
 
-    const project_status = await projectStatusModel.findOne({
-        where:{
-            uuid:project_status_uuid
-        }
-    })
+    console.log(project_status_uuid, 'project_status_uuid')
 
-    if(!project_status){
-        return res.status(404).json({
-            message: "status project not found"
+    let project_status = null;
+
+    if(project_status_uuid !== ""){
+        console.log(project_status_uuid, 'project_status_uuid is define')
+
+        const find_status = await projectStatusModel.findOne({
+            where:{
+                uuid:project_status_uuid
+            }
+        })        
+
+        project_status = find_status
+    }else{
+        console.log(project_status_uuid, 'project_status_uuid is not define')
+
+        const find_status = await projectStatusModel.findOne({
+            where:{
+                sequence:1
+            }
         })
+
+        console.log(find_status, 'find_status')
+
+        project_status = find_status
     }
 
     const project_type = await projectTypeModel.findOne({
@@ -497,6 +520,7 @@ const createData = async(req, res) => {
     
     const result = await projectModel.create({
         user_id,
+        name,
         date,
         code,
         display_code,
@@ -504,7 +528,8 @@ const createData = async(req, res) => {
         description:description,
         project_status_id:project_status.id,
         project_type_id:project_type.id,
-        executor_id
+        executor_id,
+        target_date
     })
 
     createDataHistory({
@@ -521,7 +546,7 @@ const createData = async(req, res) => {
 
 const updateData = async(req, res) => {
     const {uuid} = req.params;
-    const {user_uuid, executor_uuid, description, project_type_uuid} = req.body;
+    const {user_uuid, name, executor_uuid, description, project_type_uuid, target_date} = req.body;
 
     let executor_id = null;
 
@@ -587,9 +612,11 @@ const updateData = async(req, res) => {
     
     const result = await project.update({
         user_id:user.id,
+        name:name,
         description:description,
         project_type_id:project_type.id,
-        executor_id
+        executor_id,
+        target_date
     })
 
     createDataHistory({

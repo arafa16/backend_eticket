@@ -20,6 +20,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true
       },
+      name: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
       date: {
         type: Sequelize.DATE,
         allowNull: true
@@ -62,6 +66,10 @@ module.exports = {
           model: "project_types",
           key: "id",
         },
+      },
+      target_date: {
+        type: Sequelize.DATE,
+        allowNull: true
       },
       is_delete: {
         type: Sequelize.BOOLEAN,

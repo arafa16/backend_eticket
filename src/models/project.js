@@ -37,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     code: DataTypes.STRING,
     display_code: DataTypes.STRING,
+    name: DataTypes.STRING,
     date: DataTypes.DATE,
     year: DataTypes.STRING,
     user_id: DataTypes.INTEGER,
@@ -44,6 +45,7 @@ module.exports = (sequelize, DataTypes) => {
     executor_id: DataTypes.INTEGER,
     project_status_id: DataTypes.INTEGER,
     project_type_id: DataTypes.INTEGER,
+    target_date: DataTypes.DATE,
     is_delete: DataTypes.BOOLEAN
   }, {
     sequelize,

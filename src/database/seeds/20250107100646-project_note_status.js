@@ -21,6 +21,8 @@ module.exports = {
         uuid:uuid.v4(),
         name:'proses',
         sequence:2,
+        is_select:true,
+        is_active:true,
         is_delete:false,
         created_at: new Date(),
         updated_at: new Date(),

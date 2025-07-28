@@ -61,8 +61,6 @@ const getUsers = async(req, res) => {
         order:[sortList]
     });
 
-    console.log(querySearchObject, 'queryObject')
-
 
     return res.status(200).json({
         message:"success",
@@ -309,8 +307,6 @@ const updatePassword = async(req, res) => {
             uuid
         }
     })
-
-    console.log(user, 'user');
 
     if(!user){
         return res.status(404).json({

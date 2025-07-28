@@ -23,6 +23,9 @@ const project_attachment = require('./routes/project_attachment.route.js');
 const project_note_attachment = require('./routes/project_note_attachment.route.js');
 const project_note = require('./routes/project_note.route.js');
 const project = require('./routes/project.route.js');
+const car = require('./routes/car.route.js');
+const car_reservation = require('./routes/car_reservation.route.js');
+const car_reservation_status = require('./routes/car_reservation_status.route.js');
 const errorHandlerMiddleware = require('./middleware/error-handler.js');
 const not_found = require('./middleware/not_found.js');
 const cors = require('cors');
@@ -82,6 +85,10 @@ app.use('/project_attachment',project_attachment);
 app.use('/project_note_attachment',project_note_attachment);
 app.use('/project_note',project_note);
 app.use('/project',project);
+// Car Reservation Routes
+app.use('/car', car);
+app.use('/car_reservation', car_reservation);
+app.use('/car_reservation_status', car_reservation_status);
 app.use(errorHandlerMiddleware);
 app.use(not_found);
 

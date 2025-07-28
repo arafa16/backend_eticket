@@ -31,6 +31,10 @@ const createById = async(req, res)=>{
         project, 
         project_executor,
         project_administrator,
+        car_reservation,
+        car_reservation_user,
+        car_reservation_driver,
+        car_reservation_admin,
         admin
     } = req.body;
 
@@ -54,6 +58,10 @@ const createById = async(req, res)=>{
         project, 
         project_executor,
         project_administrator,
+        car_reservation,
+        car_reservation_user,
+        car_reservation_driver,
+        car_reservation_admin,
         admin
     })
 
@@ -72,6 +80,10 @@ const updateById = async(req, res)=>{
         project, 
         project_executor,
         project_administrator,
+        car_reservation,
+        car_reservation_user,
+        car_reservation_driver,
+        car_reservation_admin,
         entity, 
         admin
     } = req.body;
@@ -96,6 +108,10 @@ const updateById = async(req, res)=>{
         project, 
         project_executor,
         project_administrator,
+        car_reservation,
+        car_reservation_user,
+        car_reservation_driver,
+        car_reservation_admin,
         admin
     })
 

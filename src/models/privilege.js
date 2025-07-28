@@ -25,6 +25,10 @@ module.exports = (sequelize, DataTypes) => {
     project:DataTypes.BOOLEAN,
     project_executor: DataTypes.BOOLEAN,
     project_administrator: DataTypes.BOOLEAN,
+    car_reservation: DataTypes.BOOLEAN,
+    car_reservation_user: DataTypes.BOOLEAN,
+    car_reservation_driver: DataTypes.BOOLEAN,
+    car_reservation_admin: DataTypes.BOOLEAN,
     entity: DataTypes.BOOLEAN,
     admin: DataTypes.BOOLEAN
   }, {

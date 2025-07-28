@@ -40,6 +40,22 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue:0
       },
+      car_reservation: {
+        type: Sequelize.BOOLEAN,
+        defaultValue:0
+      },
+      car_reservation_user: {
+        type: Sequelize.BOOLEAN,
+        defaultValue:0
+      },
+      car_reservation_driver: {
+        type: Sequelize.BOOLEAN,
+        defaultValue:0
+      },
+      car_reservation_admin: {
+        type: Sequelize.BOOLEAN,
+        defaultValue:0
+      },
       entity: {
         type: Sequelize.BOOLEAN,
         defaultValue:0

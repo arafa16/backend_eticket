@@ -139,7 +139,7 @@ const getUserSelect = async(req, res) => {
 }
 
 const createUser = async(req, res) => {
-    const {name, email, password, nomor_hp, devisi_uuid, penempatan_uuid, status_user_uuid} = req.body;
+    const {name, email, password, nomor_hp, devisi_uuid, penempatan_uuid, status_user_uuid, is_driver, is_executor} = req.body;
 
     if(!name || !email || !password || !nomor_hp || !devisi_uuid || !penempatan_uuid || !status_user_uuid){
         return res.status(401).json({
@@ -213,7 +213,9 @@ const createUser = async(req, res) => {
         devisi_id:devisi.id,
         penempatan_id:penempatan.id,
         status_user_id:status_user.id,
-        privilege_id:privilege.id
+        privilege_id:privilege.id,
+        is_driver,
+        is_executor
     });
 
     res.status(201).json({
@@ -224,7 +226,7 @@ const createUser = async(req, res) => {
 
 const updateUser = async(req, res) => {
     const {uuid} = req.params;
-    const {name, email, nomor_hp, devisi_uuid, penempatan_uuid, status_user_uuid, is_executor, is_delete} = req.body;
+    const {name, email, nomor_hp, devisi_uuid, penempatan_uuid, status_user_uuid, is_executor, is_delete, is_driver} = req.body;
 
     const user = await userModel.findOne({
         where:{
@@ -288,6 +290,7 @@ const updateUser = async(req, res) => {
         penempatan_id:penempatan.id,
         status_user_id:status_user.id,
         is_executor,
+        is_driver,
         is_delete
     });
 

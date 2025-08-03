@@ -1,3 +1,4 @@
+const { where } = require('sequelize');
 const {
     car_reservation:carReservationModel,
     car_reservation_history:carReservationHistoryModel,
@@ -258,15 +259,15 @@ const createCarReservation = async (req, res) => {
 const updateCarReservation = async (req, res) => {
     const {uuid} = req.params;
     const {
-        car_id, 
-        user_id,
+        car_uuid, 
+        user_uuid,
         start_location,
         finish_location,
         description,
-        driver_id, 
+        driver_uuid, 
         start_date, 
         end_date,
-        car_reservation_status_id,
+        car_reservation_status_uuid,
         sequence
     } = req.body;
 
@@ -285,8 +286,14 @@ const updateCarReservation = async (req, res) => {
 
         let status_id = carReservation.car_reservation_status_id;
 
-        if(car_reservation_status_id){
-            status_id = car_reservation_status_id;
+        if(car_reservation_status_uuid){
+            const car_reservation_status = await carReservationStatusModel.findOne({
+                where:{
+                    uuid:car_reservation_status_uuid
+                }
+            });
+
+            status_id = car_reservation_status.id
         }
 
         if(sequence){
@@ -297,6 +304,43 @@ const updateCarReservation = async (req, res) => {
             })
 
             status_id = status.id
+        }
+
+        let user_id = carReservation.user_id;
+
+        if(user_uuid){
+            const user = await userModel.findOne({
+                where:{
+                    uuid:user_uuid
+                }
+            });
+
+            user_id = await user.id
+        }
+
+        let driver_id = carReservation.driver_id;
+
+        if(driver_uuid){
+            const driver = await userModel.findOne({
+                where:{
+                    uuid:driver_uuid
+                }
+            });
+
+            driver_id = driver.id
+        }
+        let car_id = carReservation.car_id
+
+        if(car_uuid){
+            const car = await carModel.findOne({
+                where:{
+                    uuid:car_uuid
+                }
+            });
+
+            if(car !== null){
+                car_id = car.id
+            }
         }
 
         carReservation.car_id = car_id || carReservation.car_id;

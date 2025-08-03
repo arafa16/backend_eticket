@@ -42,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
     devisi_id: DataTypes.INTEGER,
     penempatan_id: DataTypes.INTEGER,
     status_user_id: DataTypes.INTEGER,
+    is_driver: DataTypes.BOOLEAN,
     is_executor: DataTypes.BOOLEAN,
     is_delete: DataTypes.BOOLEAN
   }, {

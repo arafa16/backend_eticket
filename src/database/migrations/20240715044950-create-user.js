@@ -72,6 +72,10 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: 0
       },
+      is_driver: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: 0
+      },
       is_delete: {
         type: Sequelize.BOOLEAN,
         defaultValue: 0

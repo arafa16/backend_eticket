@@ -275,6 +275,8 @@ const updateCarReservation = async (req, res) => {
     sequence,
   } = req.body;
 
+  console.log(req.body, "ini body update");
+
   try {
     const carReservation = await carReservationModel.findOne({
       where: {
@@ -346,6 +348,10 @@ const updateCarReservation = async (req, res) => {
       if (car !== null) {
         car_id = car.id;
       }
+    } else if (car_uuid === "") {
+      car_id = null;
+    } else if (!car_uuid) {
+      car_id = carReservation.car_id;
     } else {
       car_id = null;
     }

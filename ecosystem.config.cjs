@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "helpdesk_backend",
+      name: "eticket_backend",
       script: "npm run dev",
     },
   ],

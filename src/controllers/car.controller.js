@@ -87,7 +87,7 @@ const getCarByUuid = async (req, res) => {
 };
 
 const createCar = async (req, res) => {
-  const { name, is_select, is_active } = req.body;
+  const { name, sequence, is_select, is_active } = req.body;
 
   if (!name) {
     return res.status(400).json({
@@ -98,6 +98,7 @@ const createCar = async (req, res) => {
   try {
     const car = await carModel.create({
       name,
+      sequence,
       is_select,
       is_active,
     });
@@ -116,7 +117,7 @@ const createCar = async (req, res) => {
 
 const updateCar = async (req, res) => {
   const { uuid } = req.params;
-  const { name, is_select, is_active, is_delete } = req.body;
+  const { name, sequence, is_select, is_active, is_delete } = req.body;
 
   if (!name) {
     return res.status(400).json({
@@ -139,6 +140,7 @@ const updateCar = async (req, res) => {
 
     await car.update({
       name,
+      sequence,
       is_select,
       is_active,
       is_delete,

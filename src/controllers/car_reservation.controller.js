@@ -1,8 +1,9 @@
-const { where } = require("sequelize");
+const { where, Op } = require("sequelize");
 const {
   car_reservation: carReservationModel,
   car_reservation_history: carReservationHistoryModel,
   car_reservation_status: carReservationStatusModel,
+  vehicle_allocation: vehicleAllocationModel,
   car: carModel,
   user: userModel,
 } = require("../models");
@@ -52,13 +53,19 @@ const getCarReservations = async (req, res) => {
   if (sort) {
     sortList = sort;
   } else {
-    sortList = "id";
+    sortList = ["id", "DESC"];
   }
 
   if (is_delete) {
     queryObject.is_delete = is_delete;
   } else {
     queryObject.is_delete = 0;
+  }
+
+  if (req.query.search !== "" || req.query.search !== null) {
+    queryObject.display_code = { [Op.like]: `%${req.query.search}%` };
+  } else {
+    queryObject.display_code = { [Op.like]: `%${""}%` };
   }
 
   const page = Number(req.query.page) || 1;
@@ -165,6 +172,7 @@ const createCarReservation = async (req, res) => {
     driver_uuid,
     start_date,
     end_date,
+    vehicle_allocation_uuid,
     car_reservation_status_uuid,
   } = req.body;
 
@@ -181,6 +189,16 @@ const createCarReservation = async (req, res) => {
 
   const code = `${makeCode}${year}`;
   const codeReservation = `CR${makeCode}${year}`;
+
+  let vehicle_allocation_id = null;
+
+  if (vehicle_allocation_uuid) {
+    const vehicle_allocation = await vehicleAllocationModel.findOne({
+      uuid: vehicle_allocation_uuid,
+    });
+
+    vehicle_allocation_id = vehicle_allocation.id;
+  }
 
   let status = 1;
 
@@ -237,6 +255,7 @@ const createCarReservation = async (req, res) => {
       start_date,
       end_date,
       driver_id,
+      vehicle_allocation_id,
       code: code,
       display_code: codeReservation,
       car_reservation_status_id: status,

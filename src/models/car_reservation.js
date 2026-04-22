@@ -22,6 +22,9 @@ module.exports = (sequelize, DataTypes) => {
       car_reservation.belongsTo(models.car, {
         foreignKey: "car_id",
       });
+      car_reservation.belongsTo(models.vehicle_allocation, {
+        foreignKey: "vehicle_allocation_id",
+      });
       car_reservation.hasMany(models.car_reservation_history);
     }
   }
@@ -41,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
       driver_id: DataTypes.INTEGER,
       start_date: DataTypes.DATE,
       end_date: DataTypes.DATE,
+      vehicle_allocation_id: DataTypes.INTEGER,
       car_id: DataTypes.INTEGER,
       car_reservation_status_id: DataTypes.INTEGER,
       is_active: DataTypes.BOOLEAN,
@@ -50,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "car_reservation",
       underscored: true,
-    }
+    },
   );
   return car_reservation;
 };

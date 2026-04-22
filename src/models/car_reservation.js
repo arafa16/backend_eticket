@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "vehicle_allocation_id",
       });
       car_reservation.hasMany(models.car_reservation_history);
+      car_reservation.hasMany(models.car_reservation_attachment);
     }
   }
   car_reservation.init(

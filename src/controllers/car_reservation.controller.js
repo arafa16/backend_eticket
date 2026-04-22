@@ -3,6 +3,7 @@ const {
   car_reservation: carReservationModel,
   car_reservation_history: carReservationHistoryModel,
   car_reservation_status: carReservationStatusModel,
+  car_reservation_attachment: carReservationAttachmentModel,
   vehicle_allocation: vehicleAllocationModel,
   car: carModel,
   user: userModel,
@@ -62,7 +63,13 @@ const getCarReservations = async (req, res) => {
     queryObject.is_delete = 0;
   }
 
-  if (req.query.search !== "" || req.query.search !== null) {
+  if (!req.query.search || req.query.search === undefined) {
+    queryObject.display_code = { [Op.like]: `%${""}%` };
+  } else if (
+    req.query.search !== "" ||
+    req.query.search !== null ||
+    req.query.search !== undefined
+  ) {
     queryObject.display_code = { [Op.like]: `%${req.query.search}%` };
   } else {
     queryObject.display_code = { [Op.like]: `%${""}%` };
@@ -139,6 +146,9 @@ const getCarReservationByUuid = async (req, res) => {
         },
         {
           model: carModel,
+        },
+        {
+          model: carReservationAttachmentModel,
         },
       ],
       order: [[{ model: carReservationHistoryModel }, "created_at", "DESC"]],

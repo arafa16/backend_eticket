@@ -27,6 +27,7 @@ const car = require("./routes/car.route.js");
 const car_reservation = require("./routes/car_reservation.route.js");
 const car_reservation_status = require("./routes/car_reservation_status.route.js");
 const vihicle_allocation = require("./routes/vihicle_allocation.route.js");
+const car_reservation_attachment = require("./routes/car_reservation_attachment.route.js");
 const errorHandlerMiddleware = require("./middleware/error-handler.js");
 const not_found = require("./middleware/not_found.js");
 const cors = require("cors");
@@ -95,6 +96,7 @@ app.use("/car", car);
 app.use("/car_reservation", car_reservation);
 app.use("/car_reservation_status", car_reservation_status);
 app.use("/vehicle_allocation", vihicle_allocation);
+app.use("/car_reservation_attachment", car_reservation_attachment);
 app.use(errorHandlerMiddleware);
 app.use(not_found);
 

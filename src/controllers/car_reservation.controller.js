@@ -150,6 +150,9 @@ const getCarReservationByUuid = async (req, res) => {
         {
           model: carReservationAttachmentModel,
         },
+        {
+          model: vehicleAllocationModel,
+        },
       ],
       order: [[{ model: carReservationHistoryModel }, "created_at", "DESC"]],
     });

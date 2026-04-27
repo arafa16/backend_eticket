@@ -292,6 +292,77 @@ const createCarReservation = async (req, res) => {
   }
 };
 
+const getAttributeCarReservation = async (req, res) => {
+  const { uuid } = req.params;
+
+  const carReservation = await carReservationModel.findOne({
+    where: {
+      uuid,
+    },
+    include: [
+      {
+        model: carModel,
+      },
+      {
+        model: userModel,
+      },
+      {
+        model: userModel,
+        as: "driver",
+      },
+      {
+        model: vehicleAllocationModel,
+      },
+    ],
+  });
+
+  if (!carReservation) {
+    return res.status(404).json({
+      message: "Car reservation not found",
+    });
+  }
+
+  const users = await userModel.findAll({
+    where: {
+      status_user_id: 2,
+    },
+    attributes: ["uuid", "name", "status_user_id"],
+  });
+
+  const drivers = await userModel.findAll({
+    where: {
+      is_driver: true,
+      status_user_id: 2,
+    },
+    attributes: ["uuid", "name", "status_user_id", "is_driver"],
+  });
+
+  const vehicle_allocations = await vehicleAllocationModel.findAll({
+    where: {
+      is_active: true,
+      is_delete: false,
+    },
+  });
+
+  const cars = await carModel.findAll({
+    where: {
+      is_active: true,
+      is_delete: false,
+    },
+  });
+
+  return res.status(200).json({
+    message: "Car reservation sttribute",
+    data: {
+      carReservation,
+      users,
+      drivers,
+      vehicle_allocations,
+      cars,
+    },
+  });
+};
+
 const updateCarReservation = async (req, res) => {
   const { uuid } = req.params;
   const {
@@ -303,11 +374,10 @@ const updateCarReservation = async (req, res) => {
     driver_uuid,
     start_date,
     end_date,
+    vehicle_allocation_uuid,
     car_reservation_status_uuid,
     sequence,
   } = req.body;
-
-  console.log(req.body, "ini body update");
 
   try {
     const carReservation = await carReservationModel.findOne({
@@ -333,7 +403,6 @@ const updateCarReservation = async (req, res) => {
 
       status_id = car_reservation_status.id;
     }
-
     if (sequence) {
       const status = await carReservationStatusModel.findOne({
         where: {
@@ -353,7 +422,9 @@ const updateCarReservation = async (req, res) => {
         },
       });
 
-      user_id = await user.id;
+      if (user !== null) {
+        user_id = user.id;
+      }
     }
 
     let driver_id = carReservation.driver_id;
@@ -388,6 +459,30 @@ const updateCarReservation = async (req, res) => {
       car_id = null;
     }
 
+    let vehicle_allocation_id = carReservation.vehicle_allocation_id;
+
+    if (
+      vehicle_allocation_uuid &&
+      vehicle_allocation_uuid !== null &&
+      vehicle_allocation_uuid !== ""
+    ) {
+      const vehicle_allocation = await vehicleAllocationModel.findOne({
+        where: {
+          uuid: vehicle_allocation_uuid,
+        },
+      });
+
+      if (vehicle_allocation !== null) {
+        vehicle_allocation_id = vehicle_allocation.id;
+      }
+    } else if (vehicle_allocation_uuid === "") {
+      vehicle_allocation_id = null;
+    } else if (!vehicle_allocation_uuid) {
+      vehicle_allocation_id = carReservation.vehicle_allocation_id;
+    } else {
+      vehicle_allocation_id = null;
+    }
+
     carReservation.car_id = car_id;
     carReservation.user_id = user_id || carReservation.user_id;
     carReservation.start_location =
@@ -399,6 +494,7 @@ const updateCarReservation = async (req, res) => {
     carReservation.start_date = start_date || carReservation.start_date;
     carReservation.end_date = end_date || carReservation.end_date;
     carReservation.car_reservation_status_id = status_id;
+    carReservation.vehicle_allocation_id = vehicle_allocation_id;
 
     await carReservation.save();
 
@@ -477,6 +573,7 @@ module.exports = {
   getCarReservations,
   createCarReservation,
   getCarReservationByUuid,
+  getAttributeCarReservation,
   updateCarReservation,
   deleteCarReservation,
 };

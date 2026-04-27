@@ -228,7 +228,7 @@ const createCarReservation = async (req, res) => {
 
     if (user_uuid) {
       const user = await userModel.findOne({
-        uuid: user_uuid,
+        where: { uuid: user_uuid },
       });
 
       user_id = user.id;
@@ -238,7 +238,7 @@ const createCarReservation = async (req, res) => {
 
     if (driver_uuid) {
       const driver = await userModel.findOne({
-        uuid: driver_uuid,
+        where: { uuid: driver_uuid },
       });
 
       if (driver !== null) {
@@ -250,7 +250,7 @@ const createCarReservation = async (req, res) => {
 
     if (car_uuid) {
       const car = await carModel.findOne({
-        uuid: car_uuid,
+        where: { uuid: car_uuid },
       });
 
       if (car !== null) {

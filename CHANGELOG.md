@@ -1,5 +1,28 @@
-## [Unreleased](https://github.com/arafa16/backend_eticket/compare/2.0.0...main)
+## [Unreleased](https://github.com/arafa16/backend_eticket/compare/2.1.0...main)
 
+## [2.1.0](https://github.com/arafa16/backend_eticket/releases/tag/2.1.0) - 2025-04-23
+
+- fixs: vehicle_allocation not found by [@arafa16](https://github.com/arafa16) in [#eda51c8](https://github.com/arafa16/backend_eticket/commit/eda51c8805fb699c4594eeb1ffd16cb999aaa2c5).
+
+- fixs: change git ignore by [@arafa16](https://github.com/arafa16) in [#2d3d685](https://github.com/arafa16/backend_eticket/commit/2d3d6853cbec0cdd3c53c360b1711b572ad220fb).
+
+- fixs: change name ecosystem by [@arafa16](https://github.com/arafa16) in [#4088d37](https://github.com/arafa16/backend_eticket/commit/4088d378cb9ab704f4122bc9c87ad73b8301a4bc).
+
+- build: make attachment in the car reservation page by [@arafa16](https://github.com/arafa16) in [#dd15c05](https://github.com/arafa16/backend_eticket/commit/dd15c0514cf577fd9e158b2a538c961c423d7ca5).
+
+- build: make new field and fixs all problem in car reservation by [@arafa16](https://github.com/arafa16) in [#bb42e71](https://github.com/arafa16/backend_eticket/commit/bb42e7144fb38945f17f01c451cc1b69365c544f).
+
+- fixs: sequence not update by [@arafa16](https://github.com/arafa16) in [#a684cf6](https://github.com/arafa16/backend_eticket/commit/a684cf678848920722abe1a8cda0374ef4395b54).
+
+- fixs: field car not update by [@arafa16](https://github.com/arafa16) in [#5f6f8a2](https://github.com/arafa16/backend_eticket/commit/5f6f8a29a6341693755d73a55098494b36bf5dec).
+
+- fixs: repaire car select by [@arafa16](https://github.com/arafa16) in [#c132d30](https://github.com/arafa16/backend_eticket/commit/c132d30fc98e87edad1c55b21cd96f5cd334e0d8).
+
+- fixs: trouble in set privilege by [@arafa16](https://github.com/arafa16) in [#ab48059](https://github.com/arafa16/backend_eticket/commit/ab480591cc750d2d2af0a76bf807acaf0e216d36).
+
+- docs: update README.md by [@arafa16](https://github.com/arafa16) in [#de602a9](https://github.com/arafa16/backend_eticket/commit/de602a9321a874ad13add80744b68a9b00dcb067).
+
+- docs: update changelog and license by [@arafa16](https://github.com/arafa16) in [#0d8157d](https://github.com/arafa16/backend_eticket/commit/0d8157d9a3b0419899341026edaed885dde3ba0c).
 
 ## [2.0.0](https://github.com/arafa16/backend_eticket/releases/tag/2.0.0) - 2025-07-28
 
